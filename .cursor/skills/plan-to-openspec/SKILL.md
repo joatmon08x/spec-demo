@@ -56,4 +56,4 @@ Worked mappings: [examples.md](examples.md).
 - Suggested-credit change: client to v2 only. Filter change: only filter selection. Email change: no email-format validation.
 - Do not complete `lib/disputes/resolve.ts` unless the user asked to apply that change after propose.
 - Do not archive. Specs become source of truth only after a later `/opsx-archive`.
-- For LY-6, partition responsibility between an implementation Cloud Agent and an independent verifier. Sequential tests are not an artificial code worker.
+- For any selected issue, partition responsibility between an implementation Cloud Agent and an independent verifier. For LY-6 specifically, do not invent a redundant test file; the existing regression test is the contract.

@@ -92,5 +92,7 @@ Current Cloud credentials cannot configure BugBot or branch rules. A Cursor-enti
 | `.cursor/agents/dispute-verifier.md` | Dispute finish-line verifier |
 | `.cursor/skills/choose-cursor-workflow/` | Walk the spec track |
 | `.cursor/skills/hand-to-cloud-agent/` | Cloud implementation, PR watch, and closeout |
+| `.cursor/skills/plan-to-openspec/` | Convert a selected Linear issue into OpenSpec artifacts |
+| `.cursor/skills/openspec-*/` | Explore, propose, apply, update, sync, and archive changes |
 | `.cursor/skills/reset-demo-state/` | Restore the planted baseline |
 | `.cursor/skills/write-prisma-query/` | Query the seeded SQLite data |

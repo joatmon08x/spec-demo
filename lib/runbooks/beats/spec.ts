@@ -10,18 +10,18 @@ export const RUNBOOK_SECTIONS_SPEC = [
         title: "Pull live Linear issue",
         promptType: "reusable",
         detail:
-          "Load the selected Linear issue. Keep <ISSUE_ID> in Backlog until implementation starts. Do not invent a fourth catalog price.",
+          "Load the selected Linear issue and fill every workflow placeholder. Keep <ISSUE_ID> in Backlog until implementation starts. Do not invent a fourth catalog price.",
         example:
-          "/ask Using Linear MCP, fetch <ISSUE_ID> (<ISSUE_TITLE>) from project openspec (https://linear.app/anysphere/project/openspec-05fc3d7dba89). Summarize title, status, acceptance (<ACCEPTANCE>), and paths. Do not edit product code.",
+          "/ask Using Linear MCP, fetch <ISSUE_ID> (<ISSUE_TITLE>) from project openspec (https://linear.app/anysphere/project/openspec-05fc3d7dba89). Fill <ACCEPTANCE>, <PATHS>, <VERIFICATION_STEPS>, and <PROTECTED_CONSTRAINTS>. Keep <CHANGE_ID> empty until /opsx-propose creates it. Do not edit product code.",
       },
       {
         id: "reproduce-worked-example",
-        title: "Worked example: reproduce LY-6 baseline",
+        title: "Optional worked example: reproduce LY-6 baseline",
         promptType: "reusable",
         detail:
-          "Worked example only — when the selected issue is LY-6. Confirm the demo baseline before any OpenSpec work. The $400 claim is valid input; Scale stays $249. Use this beat to fill <ISSUE_ID>, <ISSUE_TITLE>, <ACCEPTANCE>, and <VERIFICATION> for the reusable prompts that follow.",
+          "Worked example only — when the selected issue is LY-6. Confirm the demo baseline before any OpenSpec work. The $400 claim is valid input; Scale stays $249. Use this beat to fill the reusable placeholder contract.",
         example:
-          "Worked example (LY-6): Open http://127.0.0.1:43173/disputes/dsp_1043. Confirm the page still selects suggested-credit v1 and shows $400.00. Confirm npm test fails only in tests/suggested-credit-api.test.ts because the client still selects v1. Do not migrate the client. Do not edit that test or the seed. Placeholder fill: <ISSUE_ID>=LY-6; <ISSUE_TITLE>=Dispute suggested-credit still selects v1; <ACCEPTANCE>=client selects v2, claim stays $400, Scale cap $249, both routes remain, protected test untouched; <VERIFICATION>=client path /api/v2/disputes/*/suggested-credit, dsp_1043 UI shows $249.00 suggested credit, npm test green except as specified by the accepted change.",
+          "Worked example (LY-6): Open http://127.0.0.1:43173/disputes/dsp_1043. Confirm the page still selects suggested-credit v1 and shows $400.00. Confirm npm test fails only in tests/suggested-credit-api.test.ts because the client still selects v1. Do not migrate the client. Placeholder fill: <ISSUE_ID>=LY-6; <ISSUE_TITLE>=Dispute dsp_1043 claims $400 against a $249 Scale invoice; <CHANGE_ID>=the accepted change id created by /opsx-propose; <ACCEPTANCE>=client selects v2, claim stays $400, Scale cap $249, both routes remain, protected test untouched; <PATHS>=lib/disputes/suggested-credit-api.ts; <VERIFICATION_STEPS>=confirm v2 client path, both routes, $400 claim, $249 UI result, and green suite; <PROTECTED_CONSTRAINTS>=do not edit the protected test, seed, claim, catalog, or either route.",
       },
       {
         id: "opsx-explore",
@@ -72,7 +72,7 @@ export const RUNBOOK_SECTIONS_SPEC = [
           "One Cloud Agent owns the product changes named by the accepted OpenSpec change and the product PR. Starting ref main on joatmon08x/spec-demo.",
         example: `You are the implementation Cloud Agent for <ISSUE_ID> (<ISSUE_TITLE>) on https://github.com/joatmon08x/spec-demo (startingRef main). Linear project: https://linear.app/anysphere/project/openspec-05fc3d7dba89 (team LY).
 
-Work only from the accepted OpenSpec change for <ISSUE_ID>. Apply the product changes required by <ACCEPTANCE>. Catalog only Starter $49, Growth $99, Scale $249.
+Work only from accepted OpenSpec change <CHANGE_ID>. Apply <ACCEPTANCE> by editing only <PATHS>. Preserve <PROTECTED_CONSTRAINTS>. Catalog only Starter $49, Growth $99, Scale $249.
 
 Move <ISSUE_ID> to In Progress. Push a PR whose body includes Resolves <ISSUE_ID>. Do not merge. Do not archive the OpenSpec change.`,
         pasteLabel: "Paste to Cloud Agent",
@@ -85,9 +85,11 @@ Move <ISSUE_ID> to In Progress. Push a PR whose body includes Resolves <ISSUE_ID
           "A second Cloud Agent owns independent baseline and acceptance evidence on the same PR and Linear issue. Do not invent parallel test-authoring work.",
         example: `You are the verifier Cloud Agent for <ISSUE_ID> (<ISSUE_TITLE>) on https://github.com/joatmon08x/spec-demo. Linear issue: <ISSUE_ID>.
 
-Do not edit product code or weaken protected regression tests named by the accepted OpenSpec change. Independently verify the implementation PR against that change and <ACCEPTANCE>:
+Work from accepted OpenSpec change <CHANGE_ID>. Do not edit product code or weaken protected regression tests named by that change. Independently verify the implementation PR against <ACCEPTANCE>:
 
-<VERIFICATION>
+<VERIFICATION_STEPS>
+
+Confirm <PROTECTED_CONSTRAINTS>.
 
 Comment evidence on the PR and on <ISSUE_ID>. Do not merge.`,
         pasteLabel: "Paste to Cloud Agent",
@@ -154,10 +156,11 @@ Comment evidence on the PR and on <ISSUE_ID>. Do not merge.`,
 1. Pull latest main.
 2. Verify <ACCEPTANCE> on updated main.
 3. Run issue-specific checks:
-<VERIFICATION>
-4. Comment merge SHA and verification evidence on <ISSUE_ID>.
-5. Move <ISSUE_ID> to the existing Done state.
-6. Archive or sync the OpenSpec change only if the runbook or operator explicitly directs it. Do not invent that instruction.`,
+<VERIFICATION_STEPS>
+4. Confirm <PROTECTED_CONSTRAINTS>.
+5. Comment merge SHA and verification evidence on <ISSUE_ID>.
+6. Move <ISSUE_ID> to the existing Done state.
+7. Archive or sync OpenSpec change <CHANGE_ID> only if the runbook or operator explicitly directs it. Do not invent that instruction.`,
         pasteLabel: "Paste to Cloud Agent",
       },
       {

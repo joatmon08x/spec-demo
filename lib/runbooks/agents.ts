@@ -7,7 +7,7 @@ export const PROJECT_AGENTS = [
   {
     name: "dispute-verifier",
     path: ".cursor/agents/dispute-verifier.md",
-    when: "Independent LY-6 acceptance and post-merge evidence. Report pass/fail; write no product code.",
+    when: "Independent dispute acceptance and post-merge evidence for the LY-6 worked example. Report pass/fail; write no product code.",
   },
 ] as const;
 

@@ -29,7 +29,7 @@ The page will render the spec title and sections directly. Keeping a select with
 
 ### Parameterize the workflow and keep a worked example
 
-Reusable prompts use `<ISSUE_ID>`, `<ISSUE_TITLE>`, and issue-derived acceptance/verification inputs. LY-6-specific constraints appear in a clearly marked worked-example beat rather than being baked into Cloud role definitions. A track dedicated only to LY-6 was rejected because the same OpenSpec delivery lifecycle applies to the rest of the Linear backlog.
+Reusable prompts use `<ISSUE_ID>`, `<ISSUE_TITLE>`, `<CHANGE_ID>`, `<ACCEPTANCE>`, `<PATHS>`, `<VERIFICATION_STEPS>`, and `<PROTECTED_CONSTRAINTS>`. LY-6-specific constraints appear in a clearly marked worked-example beat rather than being baked into Cloud role definitions. A track dedicated only to LY-6 was rejected because the same OpenSpec delivery lifecycle applies to the rest of the Linear backlog.
 
 ### Partition roles, not artificial code
 

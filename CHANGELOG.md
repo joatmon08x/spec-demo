@@ -7,7 +7,7 @@ All notable changes to this project are documented here.
 ### Changed
 
 - Replaced the separate curriculum runbooks with one `/runbooks/spec` delivery track.
-- Added copy-ready OpenSpec, partitioned Cloud Agent, PR review, BugBot, human approval, and Linear closeout beats for LY-6.
+- Added parameterized OpenSpec, partitioned Cloud Agent, PR review, BugBot, human approval, and Linear closeout beats for any selected Linear issue, with LY-6 as the worked example.
 - Redirected legacy runbook and workflow URLs to the spec track.
 
 ### Removed

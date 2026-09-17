@@ -59,7 +59,7 @@ describe("spec runbook catalog", () => {
       "issue-done",
     ]);
     expect(runbookBeatSequence("spec")).toBe(
-      "Pull live Linear issue → Worked example: reproduce LY-6 baseline → Explore with /opsx-explore → Propose with /opsx-propose → Review the OpenSpec change → Validate strictly → Launch the implementation Cloud Agent → Launch the verifier Cloud Agent → Confirm partitioned ownership → Watch CI on the PR → Require Cursor Bugbot → Collect human approval → Operator merges → Launch the closeout Cloud Agent → Confirm issue Done",
+      "Pull live Linear issue → Optional worked example: reproduce LY-6 baseline → Explore with /opsx-explore → Propose with /opsx-propose → Review the OpenSpec change → Validate strictly → Launch the implementation Cloud Agent → Launch the verifier Cloud Agent → Confirm partitioned ownership → Watch CI on the PR → Require Cursor Bugbot → Collect human approval → Operator merges → Launch the closeout Cloud Agent → Confirm issue Done",
     );
   });
 
@@ -70,9 +70,15 @@ describe("spec runbook catalog", () => {
     expect(beat("pull-linear-issue")?.example).toContain("<ISSUE_ID>");
     expect(beat("pull-linear-issue")?.example).toContain("<ISSUE_TITLE>");
     expect(beat("pull-linear-issue")?.example).toContain("<ACCEPTANCE>");
-    expect(beat("reproduce-worked-example")?.title).toContain("Worked example");
+    expect(beat("pull-linear-issue")?.example).toContain("<PATHS>");
+    expect(beat("pull-linear-issue")?.example).toContain("<VERIFICATION_STEPS>");
+    expect(beat("pull-linear-issue")?.example).toContain("<PROTECTED_CONSTRAINTS>");
+    expect(beat("reproduce-worked-example")?.title).toContain("worked example");
     expect(beat("reproduce-worked-example")?.example).toContain("dsp_1043");
     expect(beat("reproduce-worked-example")?.example).toContain("LY-6");
+    expect(beat("reproduce-worked-example")?.example).toContain(
+      "Dispute dsp_1043 claims $400 against a $249 Scale invoice",
+    );
     expect(beat("opsx-explore")?.example).toContain("/opsx-explore");
     expect(beat("opsx-explore")?.example).toContain("<ISSUE_ID>");
     expect(beat("opsx-explore")?.example).toContain("<ACCEPTANCE>");
@@ -80,13 +86,18 @@ describe("spec runbook catalog", () => {
     expect(beat("opsx-propose")?.example).toContain("<ISSUE_ID>");
     expect(beat("opsx-validate")?.example).toContain("validate --changes --strict");
     expect(beat("launch-implementer")?.example).toContain("Resolves <ISSUE_ID>");
+    expect(beat("launch-implementer")?.example).toContain("<CHANGE_ID>");
     expect(beat("launch-implementer")?.example).toContain("<ACCEPTANCE>");
+    expect(beat("launch-implementer")?.example).toContain("<PATHS>");
+    expect(beat("launch-implementer")?.example).toContain("<PROTECTED_CONSTRAINTS>");
     expect(beat("launch-implementer")?.example).not.toContain("dsp_1043");
     expect(beat("launch-implementer")?.example).not.toContain(
       'SUGGESTED_CREDIT_API_VERSION to "v2"',
     );
     expect(beat("launch-verifier")?.example).toContain("Do not edit product code");
-    expect(beat("launch-verifier")?.example).toContain("<VERIFICATION>");
+    expect(beat("launch-verifier")?.example).toContain("<CHANGE_ID>");
+    expect(beat("launch-verifier")?.example).toContain("<VERIFICATION_STEPS>");
+    expect(beat("launch-verifier")?.example).toContain("<PROTECTED_CONSTRAINTS>");
     expect(beat("launch-verifier")?.example).toContain("<ACCEPTANCE>");
     expect(beat("launch-verifier")?.example).not.toContain("dsp_1043");
     expect(beat("watch-ci")?.example).toContain("<ISSUE_ID>");
@@ -97,7 +108,9 @@ describe("spec runbook catalog", () => {
     expect(beat("launch-closeout")?.example).toContain(
       "Move <ISSUE_ID> to the existing Done state",
     );
-    expect(beat("launch-closeout")?.example).toContain("<VERIFICATION>");
+    expect(beat("launch-closeout")?.example).toContain("<VERIFICATION_STEPS>");
+    expect(beat("launch-closeout")?.example).toContain("<CHANGE_ID>");
+    expect(beat("launch-closeout")?.example).toContain("<PROTECTED_CONSTRAINTS>");
     expect(beat("launch-closeout")?.example).not.toContain("dsp_1043");
     expect(beat("issue-done")?.example).toContain("<ISSUE_ID>");
     expect(beat("issue-done")?.example).toContain("<ACCEPTANCE>");
