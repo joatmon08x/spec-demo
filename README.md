@@ -1,116 +1,66 @@
 # Ledgerly
 
-Fictional B2B billing ops. Fieldnote Workspace. Operator **Avery Quinn**. Catalog is Starter **$49**, Growth **$99**, Scale **$249**. Demo clock is frozen at **23 August 2026**. Synthetic data only — no real companies.
+Fictional B2B billing operations for the Fieldnote Workspace. Avery Quinn is the operator. The only catalog prices are Starter **$49**, Growth **$99**, and Scale **$249**. All customer data is synthetic.
 
-Use it for the jumpable Grok Build **101** and **201** tracks, and for the OpenSpec Cloud Agent loop on [spec-demo](https://github.com/joatmon08x/spec-demo) (`openspec/README.md`). Copy-paste prompts live on `/runbooks/101` and `/runbooks/201`; the presenter run-of-show and speaker notes are `demo-howto.md`.
+This repository demonstrates one end-to-end **spec track**: take Linear issue [LY-6](https://linear.app/anysphere/issue/LY-6) from Backlog through OpenSpec design, partitioned Cloud Agent implementation and verification, guarded PR review, human merge, and post-merge Linear closeout.
+
+Copy-ready beats live at `/runbooks/spec`. The presenter run-of-show is `demo-howto.md`.
 
 ## Run
 
-Node 20. Nothing else global.
-
 ```bash
 npm i
+npx prisma generate
 npx prisma db seed
 npm run dev
 ```
 
-Open **http://localhost:43173**.
+Open [http://localhost:43173](http://localhost:43173).
 
-`npm test` is **1 failed / 29 passed** on a clean tree — `tests/suggested-credit-api.test.ts` is the planted API-version bug. The UI shows the deprecated v1 result of $400 for `dsp_1043`; v2 and the stored credit correctly cap at the $249 Scale price. Status pills on Invoices and Disputes write `state=` while the pages read `status`, so clicking a filter does not change the list — that is a separate planted UI seam, not a second red test. Restore both code seams with the `reset-demo-state` skill; use `npm run db:reset` only for data.
+The clean demo baseline is **1 failed / 29 passed**. `tests/suggested-credit-api.test.ts` is intentionally red because the client still selects deprecated v1. On `dsp_1043`, v1 returns the valid $400 claim; v2 and the stored credit cap at the $249 Scale price. The LY-6 demo fixes the client selection without changing the claim, seed, test, or either API route.
 
-## App
+## Spec track
 
-Dashboard, Invoices, Collections, Disputes, Runbooks, Settings. Extra book accounts are in `prisma/extra-accounts.ts`.
+1. **Design with OpenSpec** — fetch LY-6 from Linear, reproduce the planted failure, run `/opsx-explore`, run `/opsx-propose`, review the artifacts, and validate strictly.
+2. **Partitioned Cloud implementation** — one agent owns the v1-to-v2 selector and product PR; a second agent owns independent acceptance evidence.
+3. **Guarded PR review and merge** — watch CI and `Cursor Bugbot`, collect a separate human approval, then let the operator merge.
+4. **Post-merge closeout** — a Cloud Agent verifies updated `main`, comments evidence on LY-6, and moves it to Done.
 
-| Demo hook | Where |
+The OpenSpec sequence is mandatory:
+
+```text
+/opsx-explore → /opsx-propose → /opsx-apply
+```
+
+Do not use Cursor Plan mode for spec-driven work. Do not archive or sync an OpenSpec change unless the operator asks.
+
+## Review gates
+
+BugBot is a status check, not a human approving review. The intended `main` rules are:
+
+- Require a pull request.
+- Require the observed `Cursor Bugbot` status check.
+- Require one approving review from a different authorized human.
+- Keep merge authority with the operator.
+
+The current Cloud Agent credential does not have `admin` or `maintain` permission on `joatmon08x/spec-demo`; the branch-protection API returns 403. A Cursor-entitled repository administrator must enable the repository in **Cursor Dashboard → BugBot Automations**, open a safe PR so `Cursor Bugbot` appears, then add that check and one approval to the `main` ruleset. Until that is complete, the demo uses the documented manual-review fallback and must not claim BugBot passed.
+
+## Key files
+
+| Surface | Path |
 | --- | --- |
-| Runbook beats | `/runbooks/101` and `/runbooks/201` (`/workflows` and `/analysis` redirect to 101) |
-| `/loop` job | `POST` then `GET` `/api/demo/job` (~45s, not written to SQLite) |
-| Agents | `.cursor/agents/` — `ledgerly-reviewer`, `api-instrumenter`, `dispute-verifier` |
-| Skills | `.cursor/skills/` — run the demo, stage Linear for 201, or pick a Cursor workflow |
-| Disk plugin | `plugins/standard-bug-fix/` — import from disk; `/standard-bug-fix`, Linear MCP |
-| Presenter script | `demo-howto.md` — the 101 and 201 run-of-show |
+| Runbook source | `lib/runbooks/meta.ts`, `lib/runbooks/beats/spec.ts` |
+| Presenter script | `demo-howto.md` |
+| OpenSpec workflow | `openspec/README.md`, `openspec/sdk-kickoff.md` |
+| Cloud handoff | `.cursor/skills/hand-to-cloud-agent/SKILL.md` |
+| Review agents | `.cursor/agents/ledgerly-reviewer.md`, `.cursor/agents/dispute-verifier.md` |
+| Linear backlog | Project `openspec`, issues LY-6 through LY-8 |
 
-## Starter prompts
+## Guardrails
 
-Ask:
-
-```text
-What are Ledgerly's only plan prices, and which seeded invoices are overdue? Cite lib/plans.ts, prisma/seed.ts, and prisma/extra-accounts.ts.
-
-Explain the dispute flow end to end. What is intentionally unfinished? Cite the resolve helper, the resolve API route, and the dispute page. Do not edit any files.
-```
-
-Cmd-K on the settings description default:
-
-```text
-Rewrite this input's default value as one calm sentence explaining that the demo clock is frozen on 23 August 2026 so overdue math never drifts during a meeting. Keep it under 15 words.
-```
-
-Agent — suggested-credit API migration:
-
-```text
-Diagnose why dsp_1043 shows a $400 suggested credit even though v2 caps it at $249. Switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both API routes, the $400 dispute claim, and tests/suggested-credit-api.test.ts. Run the relevant tests and verify the page shows $249 from v2.
-```
-
-Then create the guardrail live:
-
-```text
-/create-rule Future code must never call /api/v1/disputes/*/suggested-credit. It must use /api/v2/disputes/*/suggested-credit. Create the project rule at .cursor/rules/suggested-credit-api-v2.mdc and show me the file before I keep it.
-```
-
-Design Mode on the dashboard KPI cards:
-
-```text
-Restyle the four KPI cards on this dashboard using only the existing design tokens in app/globals.css: a soft indigo accent on each card, stronger emphasis on the value, and a subtle hover lift. No new hex colors, no layout rewrite, no data or price changes — $49, $99, and $249 stay exactly as rendered. Touch components/kpi-card.tsx, and app/page.tsx only if you must. Two files max, nothing under lib/ or tests/. Show me the diff — I am undoing this after the demo.
-```
-
-## The 101 track
-
-Open `/runbooks/101`, copy a card, and paste it in Grok Build. You still review the result.
-
-1. **What is Grok Build?** — Ask, Plan, Build in Agent mode, Debug, and model choice.
-2. **How do I work with an agent?** — Run Mode allowlist, redact, stop, interrupt and steer, review diffs, restore from a checkpoint.
-3. **How do I govern my agent?** — create and test a rule, create and test a skill, Canvas, MCP / Figma.
-
-## The 201 track
-
-Open `/runbooks/201`, copy a card, and paste it in Grok Build. You still review the result.
-
-1. **Why is my agent ignoring my instructions?** — rename agents, Ask DDD (whole app vs `@invoice-table.tsx`), compare agents, ask across chats, check context usage.
-2. **How do I standardize agent behavior?** — personal create-api skill, promote it to the project, money-format hook and script, bypass-formatter test.
-3. **How does my agent get more information?** — Linear MCP, MCP allowlist, Ask Linear for the filter bug, import the disk plugin (skill, rule, CompanyTicket MCP), `/standard-bug-fix` on the filter-pills issue. Create a private Linear team by hand, then run `stage-linear-201`.
-4. **How do I parallelize a task?** — open the resolve-dispute plan, ledgerly-reviewer, dispatch-subagents skill, `/multitask`, ledgerly-reviewer check.
-
-## Create the private Linear team (manual)
-
-Linear MCP cannot create teams. Do this in the Linear UI **before** the 201 MCP section, on the operator’s account only.
-
-1. Open Linear → **Settings → Teams → New team**.
-2. Name it for this operator only (example: `{displayName}-field-demos`).
-3. Turn on **Make team private**. Team key can be **LY**. Confirm it at `https://linear.app/<workspace>/settings/teams/LY`.
-4. Members: **only you**. Do not add any other team.
-5. Then ask an agent to run `stage-linear-201`. That skill creates or reconciles project `ce-field-demos` on this team with exactly three Fieldnote issues.
-
-Do not skip the private-team step. A project on a public team is visible to that team.
-During a fresh setup, create issues sequentially: suggested-credit first, **Overdue / Needs review filter does not change the list second**, and invoice-email third.
-
-## Agents and skills
-
-| Name | Role |
-| --- | --- |
-| `ledgerly-reviewer` | After a change. Catalog, seed names, planted seams. |
-| `api-instrumenter` | One API route per parallel worker. |
-| `dispute-verifier` | Dispute-resolution finish line. No product code. |
-| `choose-cursor-workflow` | Walk the 101 or 201 track and pick the mode or model. |
-| `stage-linear-201` | Before 201 MCP: reconcile three issues on the private `ce-field-demos` Linear project. |
-| `standard-bug-fix` | Pull one ce-field-demos Linear issue, then fix only that bug. |
-| `dispatch-subagents` | Parallel Task launches. |
-| `hand-to-cloud-agent` | Hand durable work to a Cloud Agent. |
-| `autopilot` (built in) | Current PR-to-merge-ready skill; formerly `/babysit`. |
-| `automate` (built in) | Draft a scheduled or event-triggered Cursor Automation. |
-
-## Notes
-
-- Prices and customer names only from `lib/plans.ts`, `prisma/seed.ts`, and `prisma/extra-accounts.ts`.
-- Port 43173 busy: stop the old `npm run dev`. Empty dashboard: `npm run db:reset`.
+- Prices come from `lib/plans.ts`; never invent another tier.
+- Customer names come from `prisma/seed.ts` and `prisma/extra-accounts.ts`.
+- Preserve both suggested-credit routes.
+- Do not edit `tests/suggested-credit-api.test.ts` to make the demo green.
+- Do not correct the $400 dispute claim.
+- The unfinished dispute resolution stub remains out of scope.

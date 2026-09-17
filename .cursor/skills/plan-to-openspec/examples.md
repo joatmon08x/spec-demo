@@ -1,6 +1,6 @@
-# 201 mocked Linear issues → OpenSpec
+# Live Linear issues → OpenSpec
 
-Source of truth for titles, bodies, paths, and URLs: `FIELD_DEMO_ISSUES` in `lib/runbooks/linear-field-demos.ts`. Treat each row as a Linear issue. Do not fetch Linear.
+Source of truth for titles, bodies, paths, and URLs is the live [openspec Linear project](https://linear.app/anysphere/project/openspec-05fc3d7dba89). Fetch the selected issue through Linear MCP before proposing a change.
 
 Catalog only: Starter $49, Growth $99, Scale $249.
 
@@ -25,7 +25,7 @@ The dispute page client MUST call `/api/v2/disputes/{id}/suggested-credit`.
 - **AND** v1 still returns the raw 40000 cent claim
 ```
 
-## 2. filter-pills (always second if translating the whole board)
+## 2. filter-pills
 
 - Change id: `filter-pills-status`
 - Capability: `status-filter-pills`

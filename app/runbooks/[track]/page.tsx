@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { HashScroll } from "@/components/hash-scroll";
 import { PageHeader } from "@/components/page-header";
 import { RunbookCatalog } from "@/components/runbook-catalog";
-import { RunbookCatalogSelect } from "@/components/runbook-catalog-select";
 import { RUNBOOK_TRACKS, getRunbookTrack } from "@/lib/runbooks/meta";
 
 export function generateStaticParams() {
@@ -30,12 +29,7 @@ export default async function RunbookTrackPage({
       <PageHeader
         eyebrow="Demo catalog"
         title="Runbooks"
-        description="Choose a track, jump to a section, and copy the next beat into Grok Build."
-      />
-
-      <RunbookCatalogSelect
-        tracks={RUNBOOK_TRACKS.map((entry) => ({ id: entry.id, title: entry.title }))}
-        trackId={track.id}
+        description="Jump to a section and copy the next beat into Grok Build or a Cloud Agent."
       />
 
       <div>

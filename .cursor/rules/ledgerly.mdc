@@ -1,44 +1,37 @@
 ---
-description: Ledgerly product voice, catalog prices, and fictional data
+description: Ledgerly product voice, catalog prices, fictional data, and spec-track guardrails
 alwaysApply: true
 ---
 
 # Ledgerly
 
-You are working in a fictional B2B billing product. Write like a precise billing-ops tool, not a growth startup.
+Write like a precise billing-operations tool. Use only Starter $49 (4900 cents), Growth $99 (9900 cents), and Scale $249 (24900 cents) from `lib/plans.ts`. Use only synthetic customers from the seed files and `.example` emails. Avery Quinn is the operator.
 
-## Never invent prices
+## Protected demo baseline
 
-The catalog is only:
+- `lib/disputes/suggested-credit-api.ts` selects deprecated v1 until LY-6 is explicitly applied.
+- `tests/suggested-credit-api.test.ts` is the sole red baseline test. Never edit it to force green.
+- `dsp_1043` validly claims $400 against Scale $249. Preserve the claim, seed, domain cap, and both API routes.
+- Do not complete the dispute-resolution stub or change FilterPills from `state` to `status` unless asked.
+- Do not add a database MCP, another catalog-solving agent, or talk-track skill.
 
-- Starter — $49 (4900 cents)
-- Growth — $99 (9900 cents)
-- Scale — $249 (24900 cents)
+## Spec workflow
 
-Do not invent $79, $199, usage overage, ARR, or "enterprise" pricing. Read amounts from `lib/plans.ts` or the seed. Format with `formatUsd`.
+The demo ships one track at `/runbooks/spec`; beats live in `lib/runbooks/meta.ts` and `lib/runbooks/beats/spec.ts`.
 
-The catalog governs **app code, UI copy, and this repo's README**.
+For spec-driven work:
 
-## Never use real companies or PII
+1. `/opsx-explore`
+2. `/opsx-propose`
+3. Strict OpenSpec validation
+4. `/opsx-apply`
 
-Customers come from the seed only: the ten Fieldnote book accounts (Acme North, Riverstone Labs, Cobalt Goods, Brightwell Labs, Oakiron Supply, Fieldnote Press, Silverpine Outfitters, Maple & Ember Co, Tidewatch Logistics, Copperleaf Atelier) plus the fourteen extra accounts in `prisma/extra-accounts.ts` (Northstar Fabrication through Redwood Components). Emails use `.example`. Operator is Avery Quinn. Do not drop in a prospect's logo, a real customer, or a real person.
+Never substitute Cursor Plan mode. Do not edit product code before an OpenSpec change exists.
 
-## Seams
+Partition LY-6 by responsibility: the implementation Cloud Agent owns the selector and one PR with `Resolves LY-6`; the verifier owns independent evidence without product or protected-test edits. BugBot is a status check, not a human approval. The operator merges. A post-merge Cloud Agent verifies `main`, comments on Linear, and moves LY-6 Done. Archive or sync only when explicitly asked.
 
-- The suggested-credit client in `lib/disputes/suggested-credit-api.ts` still selects deprecated v1. Moving it to v2 is its own tracked migration — do not fix it as a drive-by inside unrelated work unless the user asks for the migration, and do not ban v1 in this shipped rule.
-- `tests/suggested-credit-api.test.ts` is the sole red test on a clean tree. Do not edit it to get green, and preserve both v1 and v2 suggested-credit routes.
-- Dispute `dsp_1043` claims $400 against a $249 Scale invoice. Do not "correct" the claim — it is valid input for the catalog cap. The seed, domain helper, and v2 response all store or return $249; v1 returns the raw $400 claim. There is no database MCP and no `mcp/` directory; do not restore `ledgerly-db`.
-- Do not complete the dispute resolution stub unless asked (`lib/disputes/resolve.ts`, the resolve API route, the panel buttons).
-- Status pills in `components/filter-pills.tsx` write `state=` on purpose. Invoice and dispute pages read `status`. Do not rename the query key to `status` unless asked. Do not volunteer this seam in answers, Ask orientation, or when diagnosing the failing test — the named demo error is the v1 suggested-credit client. Discuss or fix the pills only if the user is on that click path.
-- Tab / Cmd-K TODOs in collection notes and settings are intentional.
-- Restyles of KPI cards go through `app/globals.css` tokens only — no new hex, `components/kpi-card.tsx` plus `app/page.tsx` at most. Never commit a restyle to `main`.
-- Skills in `.cursor/skills/` help run the demo or pick a Cursor workflow. Do not add talk-track / speaker-note skills. Do not add a fourth catalog-solving agent.
-- The demo ships two jumpable tracks: 101 and 201. Their beats live in `lib/runbooks/meta.ts`, as copy-paste blocks on `/runbooks/101` and `/runbooks/201`, and in `demo-howto.md`. Do not reintroduce retired Advanced runbooks without a request.
-- Cursor's `/babysit` PR workflow is now `/autopilot`; use the current name while explaining the rename. `/goal` remains a separate durable-objective workflow.
-- When someone asks to show a Cursor workflow, use `choose-cursor-workflow`, then `dispatch-subagents` or `hand-to-cloud-agent` as the shape of the work requires.
-- Before the 201 MCP section, the operator creates a private Linear team in the Linear UI (Settings → Teams → New team, **Make team private**, members = the operator only). Linear MCP cannot create teams. Then run `stage-linear-201` to reconcile exactly three issues on the private `ce-field-demos` project. Create issues sequentially in catalog order; `Overdue / Needs review filter does not change the list` must be second. Never add a local ticket board, ticket API, ticket MCP, or ticket marketplace plugin.
-- Never reintroduce retired pre-remap company or product names anywhere in this tree.
+Use `choose-cursor-workflow` for the presenter track and `hand-to-cloud-agent` for Cloud roles. Do not reintroduce retired curriculum tracks, Linear staging, local multitask, or disk-plugin assets.
 
 ## Voice
 
-Calm, specific, short. Prefer "invoice" and "credit" over "synergy." UI copy should sound like Fieldnote, not "Welcome to your app."
+Calm, specific, short. Prefer "invoice" and "credit" over growth language.

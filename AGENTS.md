@@ -2,60 +2,30 @@
 
 # This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing Next.js code. Heed deprecation notices.
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+This block is written and re-added by `next dev`. Removing it only creates a recurring uncommitted change.
 
 <!-- END:nextjs-agent-rules -->
 
 # Ledgerly
 
-Fictional billing ops SaaS. Fieldnote Workspace. Operator Avery Quinn. No auth. No real companies.
+Fictional Fieldnote billing operations. Avery Quinn is the operator. No auth or real companies.
 
-Catalog prices are frozen: Starter **$49**, Growth **$99**, Scale **$249**. Never invent a fourth price, live ARR, or a real customer name.
-
-This is a **Cursor demo app** with two jumpable tracks: 101 and 201. Runbook beats live in `lib/runbooks/meta.ts` and as copy-paste blocks on `/runbooks/101` and `/runbooks/201`; the presenter run-of-show is `demo-howto.md`. Project subagents live in `.cursor/agents/`. Skills live in `.cursor/skills/`. Do not add talk-track or speaker-note skills. Do not reintroduce retired Advanced runbooks without a request.
+Catalog prices are fixed: Starter **$49**, Growth **$99**, Scale **$249**. Read prices from `lib/plans.ts`; read customer names from `prisma/seed.ts` and `prisma/extra-accounts.ts`.
 
 ## Cursor Cloud specific instructions
 
-### Install
+### Install and run
 
 ```bash
 npm i
 npx prisma generate
-```
-
-`.cursor/environment.json` runs that on setup.
-
-### Seed
-
-SQLite file is `prisma/dev.db` (gitignored). Schema URL is hardcoded in `prisma/schema.prisma` as `file:./dev.db`. No `.env` required.
-
-```bash
 npx prisma db seed
-```
-
-The seed script runs `prisma db push` first, then reloads deterministic Fieldnote data. Safe to re-run. Demo clock is **2026-08-23**.
-
-### Dev server
-
-```bash
 npm run dev
 ```
 
-Listens on **43173** (not 3000).
-
-### Private Linear team (manual, before 201 MCP)
-
-Linear MCP cannot create teams. The operator creates a private team in the Linear UI, then an agent runs `stage-linear-201`.
-
-1. Open Linear → **Settings → Teams → New team**.
-2. Name it for this operator only (example: `{displayName}-field-demos`).
-3. Turn on **Make team private**. Team key can be **LY**. Settings URL looks like `https://linear.app/<workspace>/settings/teams/LY`.
-4. Members: **only the operator**. Do not add any other team.
-5. Run `stage-linear-201` to create or reconcile project `ce-field-demos` on that team with exactly three Fieldnote issues.
-
-Do not `save_project` onto a public team. Do not add a local ticket board, ticket API, ticket MCP, or ticket marketplace plugin.
+The app listens on port **43173**. SQLite is `prisma/dev.db`; no `.env` is required.
 
 ### Tests
 
@@ -63,59 +33,63 @@ Do not `save_project` onto a public team. Do not add a local ticket board, ticke
 npm test
 ```
 
-One test fails on a clean tree: `tests/suggested-credit-api.test.ts` expects the client to use v2 while `lib/disputes/suggested-credit-api.ts` still selects deprecated v1. That migration is tracked on its own, so do not fix it as a drive-by. Preserve both routes and never change the test or seed to get green.
+The demo baseline is **1 failed / 29 passed**. `tests/suggested-credit-api.test.ts` expects v2 while `lib/disputes/suggested-credit-api.ts` intentionally selects deprecated v1. Preserve both routes, the valid $400 claim on `dsp_1043`, and the $249 Scale cap. Do not edit the test or seed to get green.
 
-Passing tests include `tests/money.test.ts` and `tests/plans.test.ts`. Environment start seeds the database and runs only the passing tests so a red suite cannot mark the machine as failed to boot.
+### Spec track
 
-Shipped suite on a clean tree: **1 failed / 29 passed**. The `dsp_1043` page shows v1's $400 result; v2 and the stored credit are correctly capped at $249. Invoice and dispute status pills write `state=` while the pages read `status` — that click path is a separate planted UI seam, not a second red test. Do not volunteer it when explaining the app or the failing test; only when the user is on that click path.
+The single runbook is `/runbooks/spec`. Its source of truth is `lib/runbooks/meta.ts` and `lib/runbooks/beats/spec.ts`; presenter guidance is `demo-howto.md`.
+
+The four sections are:
+
+1. Design with OpenSpec.
+2. Partitioned Cloud implementation.
+3. Guarded PR review and merge.
+4. Post-merge Linear closeout.
+
+Do not reintroduce the retired curriculum tracks or their staging/plugin assets.
 
 ### OpenSpec
 
-Always-on rule: `.cursor/rules/plan-to-openspec.mdc` — start spec work with `/opsx-explore`, not Cursor Plan mode. Then `/opsx-propose` before product code.
-
-This repo’s Cloud Agent backlog is Linear project [openspec](https://linear.app/anysphere/project/openspec-05fc3d7dba89): **LY-6**, **LY-7**, **LY-8**. Git: [joatmon08x/spec-demo](https://github.com/joatmon08x/spec-demo) `main`. See `openspec/sdk-kickoff.md`.
+Start spec-driven work with `/opsx-explore`, then `/opsx-propose`, then `/opsx-apply`. Do not use Cursor Plan mode. Product code must not change until `openspec/changes/<id>/` exists and strict validation passes.
 
 ```bash
 npx openspec validate --changes --strict
 npx openspec list
 ```
 
-Cursor Desktop slash commands are `/opsx-explore`, `/opsx-propose`, `/opsx-apply`, `/opsx-archive` (hyphen form). Do not archive unless asked. CLI: `@fission-ai/openspec` (devDependency) or `npx @fission-ai/openspec`. Cloud spawn: `openspec/sdk-kickoff.md`.
+Do not archive or sync unless the operator asks.
 
-### Multi-file stub (leave it unless asked)
+### Linear and Cloud Agents
 
-Incomplete on purpose:
+Linear project: [openspec](https://linear.app/anysphere/project/openspec-05fc3d7dba89), team `LY`. Git repository: [joatmon08x/spec-demo](https://github.com/joatmon08x/spec-demo), starting ref `main`.
 
-- `lib/disputes/resolve.ts`
-- `app/api/disputes/[id]/resolve/route.ts`
-- `app/disputes/[id]/page.tsx` (resolution panel)
+For LY-6:
 
-### Product constraints
+- Implementation Cloud Agent owns the v1-to-v2 client selector and one PR with `Resolves LY-6`.
+- Verification Cloud Agent owns independent evidence and must not edit product code or the protected regression test.
+- `/autopilot` watches conflicts, comments, CI, and the `Cursor Bugbot` check.
+- BugBot is not a human approval. A human approves and the operator merges.
+- A post-merge Cloud Agent verifies updated `main`, comments evidence on LY-6, and moves it to Done.
 
-- Prices only from `lib/plans.ts`.
-- Customer names only from `prisma/seed.ts` and `prisma/extra-accounts.ts`.
-- Comments in code must not cite Slack, GitHub, or issue-tracker URLs.
-- Do not rename Collections / Nudge / Pulse / Slatebook / Harborbill, and never reintroduce retired pre-remap names.
-- Do not add Deno workflows or GitHub Actions starters. Do not add better-sqlite3.
-- Do not add talk-track / speaker-note skills. Do not add a fourth catalog-solving agent. Runbook beats live in `lib/runbooks/meta.ts`.
+Copy-ready prompts live in `openspec/sdk-kickoff.md` and `.cursor/skills/hand-to-cloud-agent/SKILL.md`.
+
+Current Cloud credentials cannot configure BugBot or branch rules. A Cursor-entitled repository administrator must enable BugBot, make its check appear on a safe PR, and require that check plus one human approval. Never claim an external check passed without evidence.
+
+### Protected seams
+
+- Do not complete `lib/disputes/resolve.ts`, its API route, or resolution buttons unless asked.
 - Do not rename the FilterPills query key from `state` to `status` unless asked.
-- Do not add a Prisma/SQLite MCP or restore the `mcp/` directory. Query the seed with Prisma (`write-prisma-query`) or the HTTP API.
+- Do not add a database MCP or restore an `mcp/` directory.
+- Do not add another catalog-solving agent or talk-track skill.
+- Keep Collections, Nudge, Pulse, Slatebook, and Harborbill names unchanged.
 
 ### Agents and skills
 
 | Path | Role |
 | --- | --- |
-| `.cursor/agents/ledgerly-reviewer.md` | Verifier after code changes |
-| `.cursor/agents/api-instrumenter.md` | `/multitask` worker — one API route |
-| `.cursor/agents/dispute-verifier.md` | `/goal` and `/orchestrate` finish line |
-| `.cursor/skills/choose-cursor-workflow/` | Walk the 101 or 201 track: modes, models, rules, skills, and finishing one task with an agent |
-| `.cursor/skills/stage-linear-201/` | Before the 201 MCP section: reconcile three issues on the private `ce-field-demos` Linear project |
-| `.cursor/skills/standard-bug-fix/` | `/standard-bug-fix` — pull one ce-field-demos Linear issue and fix only that bug |
-| `.cursor/skills/dispatch-subagents/` | Parallel Task launches |
-| `.cursor/skills/plan-to-openspec/` | `/plan-to-openspec` — after `/opsx-explore`, write OpenSpec artifacts (mocked 201 Linear issues) |
-| `.cursor/skills/openspec-propose/` | `/opsx-propose` — planning artifacts only |
-| `.cursor/skills/openspec-apply-change/` | `/opsx-apply` — implement an OpenSpec change |
-| `.cursor/skills/hand-to-cloud-agent/` | Cloud `/goal`, `/autopilot`, and `/orchestrate` |
-| `.cursor/skills/write-prisma-query/` | Invoice, dispute, and customer lookups against SQLite — not an MCP |
-| `.cursor/mcp.json` | Empty project MCP map. 101 uses Figma (user MCP). 201 uses Linear (user MCP or `plugins/standard-bug-fix`). |
-| `plugins/standard-bug-fix/` | 201-track disk plugin: `/standard-bug-fix` skill, Linear writeback rule, Linear MCP. |
+| `.cursor/agents/ledgerly-reviewer.md` | Diff reviewer after changes |
+| `.cursor/agents/dispute-verifier.md` | Dispute finish-line verifier |
+| `.cursor/skills/choose-cursor-workflow/` | Walk the spec track |
+| `.cursor/skills/hand-to-cloud-agent/` | Cloud implementation, PR watch, and closeout |
+| `.cursor/skills/reset-demo-state/` | Restore the planted baseline |
+| `.cursor/skills/write-prisma-query/` | Query the seeded SQLite data |

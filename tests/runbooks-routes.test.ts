@@ -9,118 +9,80 @@ const request = new Request("http://localhost/api/runbooks");
 const trackParams = (track: string) => ({ params: Promise.resolve({ track }) });
 
 describe("runbooks API", () => {
-  it("lists the 101 and 201 tracks with section-header tabs", async () => {
+  it("lists one spec track with section links", async () => {
     const response = await getRunbookCatalog();
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.tracks.map((track: { id: string }) => track.id)).toEqual(["101", "201"]);
-
-    for (const track of body.tracks) {
-      expect(track).not.toHaveProperty("runbookSlugs");
-      expect(track.href).toBe(`/runbooks/${track.id}`);
-      expect(track.sections.length).toBeGreaterThan(0);
-      expect(track.sections.map((section: { id: string }) => section.id)).toEqual(
-        [...new Set(track.sections.map((section: { id: string }) => section.id))],
-      );
-      for (const section of track.sections) {
-        expect(section.title).not.toMatch(/^Demo \d+$/);
-        expect(section.href).toBe(`/runbooks/${track.id}#${section.id}`);
-      }
+    expect(body.tracks.map((track: { id: string }) => track.id)).toEqual(["spec"]);
+    expect(body.tracks[0].href).toBe("/runbooks/spec");
+    expect(body.tracks[0].sections.map((section: { id: string }) => section.id)).toEqual([
+      "design",
+      "implement",
+      "review-merge",
+      "closeout",
+    ]);
+    for (const section of body.tracks[0].sections) {
+      expect(section.href).toBe(`/runbooks/spec#${section.id}`);
     }
-
-    expect(body.tracks[0].sections.map((section: { title: string }) => section.title)).toEqual([
-      "What is Grok Build?",
-      "How do I work with an agent?",
-      "How do I govern my agent?",
-    ]);
-    expect(body.tracks[1].sections.map((section: { title: string }) => section.title)).toEqual([
-      "Why is my agent ignoring my instructions?",
-      "How do I standardize agent behavior?",
-      "How does my agent get more information?",
-      "How do I parallelize a task?",
-    ]);
   });
 
-  it("returns the selected track catalog with beats", async () => {
-    const response = await getRunbookTrack(request, trackParams("101"));
+  it("returns the spec track with beats", async () => {
+    const response = await getRunbookTrack(request, trackParams("spec"));
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.id).toBe("101");
-    expect(body.href).toBe("/runbooks/101");
-    expect(body.sections.map((section: { id: string }) => section.id)).toEqual([
-      "first-prompt",
-      "work-with-agent",
-      "govern-agent",
-    ]);
-    expect(body.sections[0].beats[0].id).toBe("ask");
-    expect(body).not.toHaveProperty("runbooks");
+    expect(body.id).toBe("spec");
+    expect(body.href).toBe("/runbooks/spec");
+    expect(body.sections[0].beats[0].id).toBe("pull-ly6");
+    expect(body.sections.at(-1).beats.at(-1).id).toBe("ly6-done");
   });
 
-  it("returns 404 for an unknown track", async () => {
-    const response = await getRunbookTrack(request, trackParams("bogus"));
-
-    expect(response.status).toBe(404);
-    await expect(response.json()).resolves.toEqual({ error: "Track not found" });
-  });
-
-  it("returns the 201 track catalog with beats", async () => {
-    const response = await getRunbookTrack(request, trackParams("201"));
-    const body = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(body.id).toBe("201");
-    expect(body.href).toBe("/runbooks/201");
-    expect(body.sections.map((section: { id: string }) => section.id)).toEqual([
-      "target-context",
-      "standardize-behavior",
-      "mcp-more-info",
-      "parallelize-task",
-    ]);
-    expect(body.sections[0].beats[0].id).toBe("rename-agent-1-all");
-    expect(body).not.toHaveProperty("runbooks");
-  });
-
-  it("returns 404 for the retired advanced track", async () => {
-    const response = await getRunbookTrack(request, trackParams("advanced"));
-    expect(response.status).toBe(404);
-  });
+  it.each(["101", "201", "advanced", "bogus"])(
+    "returns 404 for retired or unknown track %s",
+    async (track) => {
+      const response = await getRunbookTrack(request, trackParams(track));
+      expect(response.status).toBe(404);
+      await expect(response.json()).resolves.toEqual({ error: "Track not found" });
+    },
+  );
 });
 
 describe("runbooks redirects", () => {
-  it("sends legacy workflow, analysis, and retired-track URLs to the 101 runbooks track", async () => {
+  it("sends legacy URLs to the spec track", async () => {
     const redirects = (await nextConfig.redirects?.()) ?? [];
+    const sources = [
+      "/workflows",
+      "/workflows/:slug",
+      "/analysis",
+      "/analysis/:path*",
+      "/runbooks/advanced",
+      "/runbooks/commands",
+      "/runbooks/commands/:slug",
+      "/runbooks/101",
+      "/runbooks/201",
+    ];
 
-    expect(redirects).toEqual(
-      expect.arrayContaining([
-        { source: "/workflows", destination: "/runbooks/101", permanent: false },
-        { source: "/workflows/:slug", destination: "/runbooks/101", permanent: false },
-        { source: "/analysis", destination: "/runbooks/101", permanent: false },
-        { source: "/analysis/:path*", destination: "/runbooks/101", permanent: false },
-        { source: "/runbooks/advanced", destination: "/runbooks/101", permanent: false },
-        { source: "/runbooks/commands", destination: "/runbooks/101", permanent: false },
-        { source: "/runbooks/commands/:slug", destination: "/runbooks/101", permanent: false },
-      ]),
-    );
-    expect(redirects).not.toEqual(
-      expect.arrayContaining([{ source: "/runbooks/201", destination: "/runbooks/101", permanent: false }]),
-    );
+    for (const source of sources) {
+      expect(redirects).toContainEqual({
+        source,
+        destination: "/runbooks/spec",
+        permanent: false,
+      });
+    }
   });
 });
 
 describe("runbooks catalog hrefs", () => {
-  it("builds track and section-header links", () => {
-    expect(runbookTrackHref("101")).toBe("/runbooks/101");
-    expect(runbookSectionHref("101", "first-prompt")).toBe("/runbooks/101#first-prompt");
-    expect(runbookTrackHref("201")).toBe("/runbooks/201");
-    expect(runbookSectionHref("201", "target-context")).toBe("/runbooks/201#target-context");
+  it("builds spec track and section links", () => {
+    expect(runbookTrackHref("spec")).toBe("/runbooks/spec");
+    expect(runbookSectionHref("spec", "design")).toBe("/runbooks/spec#design");
   });
 });
 
 describe("runbooks page routes", () => {
-  it("prebuilds the 101 and 201 track pages", () => {
-    expect(generateTrackParams()).toEqual([{ track: "101" }, { track: "201" }]);
-    expect(RUNBOOK_TRACKS.map((track) => track.id)).toEqual(["101", "201"]);
+  it("prebuilds only the spec track", () => {
+    expect(generateTrackParams()).toEqual([{ track: "spec" }]);
+    expect(RUNBOOK_TRACKS.map((track) => track.id)).toEqual(["spec"]);
   });
 });

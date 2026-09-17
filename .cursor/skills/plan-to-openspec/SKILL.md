@@ -1,6 +1,6 @@
 ---
 name: plan-to-openspec
-description: Turns a mocked ce-field-demos Linear issue or a scoped request into an OpenSpec change after /opsx-explore. Use when the user runs /plan-to-openspec, /opsx-explore, or wants spec-first artifacts from the 201 Fieldnote issues in lib/runbooks/linear-field-demos.ts. Do not use Cursor Plan mode.
+description: Turns a live openspec Linear issue or scoped request into an OpenSpec change after /opsx-explore. Do not use Cursor Plan mode.
 disable-model-invocation: true
 ---
 
@@ -24,8 +24,8 @@ Cursor Desktop spells those commands with hyphens: `/opsx-explore`, `/opsx-propo
 Pick **one** source. Do not invent a fourth Fieldnote issue or a fourth catalog price.
 
 1. A scoped request the user already explored with `/opsx-explore`.
-2. A 201 issue from Linear project [openspec](https://linear.app/anysphere/project/openspec-05fc3d7dba89) (team `LY`). Prefer live issues **LY-6**, **LY-7**, **LY-8** via Linear MCP (`list_issues` project `openspec`). Fallback: `FIELD_DEMO_ISSUES` in `lib/runbooks/linear-field-demos.ts`. Do not add a ticket board, ticket API, or ticket MCP.
-3. If the user says “201”, “Linear”, or “openspec project” and names no issue, explore then propose catalog issues **sequentially** in this order: LY-6 suggested-credit, LY-7 filter, LY-8 email. Never in parallel. Filter must be second.
+2. A live issue from Linear project [openspec](https://linear.app/anysphere/project/openspec-05fc3d7dba89) (team `LY`). Use Linear MCP for **LY-6**, **LY-7**, or **LY-8**. Do not substitute stale local issue data or add a ticket board, ticket API, or ticket MCP.
+3. If the user says “Linear” or “openspec project” and names no issue, ask which live issue to use. The `/runbooks/spec` demo uses LY-6.
 
 Exact titles:
 
@@ -46,7 +46,7 @@ Worked mappings: [examples.md](examples.md).
    - `specs/<capability>/spec.md` — ADDED/MODIFIED requirements with Given/When/Then
    - `design.md` — how, ownership, out of scope
    - `tasks.md` — checklist; one capability per isolated worker when work splits files
-6. Copy acceptance from the issue `description` in `linear-field-demos.ts`. Paths in `ledgerlyPaths` become Impact. URLs in `ledgerlyUrls` become verify scenarios.
+6. Copy acceptance, paths, and verification URLs from the live Linear issue description.
 7. `openspec validate <id> --strict` and `openspec status --change <id>`. Report the change path. Do not implement.
 
 ## Constraints
@@ -56,4 +56,4 @@ Worked mappings: [examples.md](examples.md).
 - Suggested-credit change: client to v2 only. Filter change: only filter selection. Email change: no email-format validation.
 - Do not complete `lib/disputes/resolve.ts` unless the user asked to apply that change after propose.
 - Do not archive. Specs become source of truth only after a later `/opsx-archive`.
-- Parent `/multitask` prompts are the delta spec files plus `design.md`. Sequential tests are not a fourth parallel worker.
+- For LY-6, partition responsibility between an implementation Cloud Agent and an independent verifier. Sequential tests are not an artificial code worker.
