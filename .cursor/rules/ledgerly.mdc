@@ -28,7 +28,7 @@ For spec-driven work:
 
 Never substitute Cursor Plan mode. Do not edit product code before an OpenSpec change exists.
 
-Partition LY-6 by responsibility: the implementation Cloud Agent owns the selector and one PR with `Resolves LY-6`; the verifier owns independent evidence without product or protected-test edits. BugBot is a status check, not a human approval. The operator merges. A post-merge Cloud Agent verifies `main`, comments on Linear, and moves LY-6 Done. Archive or sync only when explicitly asked.
+For any selected Linear issue, fill the issue id, title, accepted change, acceptance, paths, verification steps, and protected constraints. Partition responsibility: the implementation Cloud Agent owns the issue's product paths and one PR with `Resolves <ISSUE_ID>`; the verifier owns independent evidence without product or protected-test edits. BugBot is a status check, not a human approval. The operator merges. A post-merge Cloud Agent verifies `main`, comments on Linear, and moves the selected issue Done. Archive or sync only when explicitly asked. LY-6 is the worked example, not a hardcoded workflow requirement.
 
 Use `choose-cursor-workflow` for the presenter track and `hand-to-cloud-agent` for Cloud roles. Do not reintroduce retired curriculum tracks, Linear staging, local multitask, or disk-plugin assets.
 

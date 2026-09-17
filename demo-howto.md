@@ -1,6 +1,6 @@
 # Ledgerly spec track demo
 
-Presenter run-of-show for `/runbooks/spec`. The goal is to show one complete delivery loop for [Linear LY-6](https://linear.app/anysphere/issue/LY-6): design by specification, partition work across Cloud Agents, review one product PR, merge as a human, then close the ticket with a fresh Cloud Agent.
+Presenter run-of-show for `/runbooks/spec`. The track applies to any selected Linear issue: design by specification, partition work across Cloud Agents, review one product PR, merge as a human, then close the ticket with a fresh Cloud Agent. [LY-6](https://linear.app/anysphere/issue/LY-6) is the filled worked example.
 
 Ledgerly is fictional. Avery Quinn is the operator. Catalog prices are Starter **$49**, Growth **$99**, and Scale **$249**. The valid claim on `dsp_1043` is **$400**; the current v2 API and stored credit cap it at **$249**.
 
@@ -36,11 +36,11 @@ Do not read long prompts aloud. State the intent, copy the matching card from `/
 
 ## 1. Design with OpenSpec
 
-### Pull live LY-6
+### Pull the selected Linear issue
 
-Use the first card to fetch LY-6 with Linear MCP. Show the Backlog state, acceptance criteria, and paths. Do not move it yet.
+Use the first card to fetch `<ISSUE_ID>` with Linear MCP. Show the Backlog state, title, acceptance criteria, allowed paths, verification steps, and protected constraints. Fill every placeholder before continuing. Do not move the issue yet.
 
-### Reproduce the planted failure
+### Worked example: reproduce LY-6
 
 Open [dsp_1043](http://127.0.0.1:43173/disputes/dsp_1043). Point out the $400 claim, the $249 Scale cap, and the v1 label. Run the test suite and show that only the expected migration contract is red.
 
@@ -86,11 +86,11 @@ Launch the two cards against the same accepted change.
 
 ### Implementation Cloud Agent
 
-The implementer moves LY-6 to **In Progress**, runs `/opsx-apply`, changes only `SUGGESTED_CREDIT_API_VERSION` from v1 to v2, verifies the result, and opens one PR containing `Resolves LY-6`. It does not merge or archive.
+The implementer moves `<ISSUE_ID>` to **In Progress**, runs `/opsx-apply <CHANGE_ID>`, edits only `<PATHS>`, satisfies `<ACCEPTANCE>`, and opens one PR containing `Resolves <ISSUE_ID>`. It does not merge or archive. For LY-6, the only product edit is the suggested-credit selector.
 
 ### Verification Cloud Agent
 
-The verifier independently records the clean-main baseline, then checks the implementation PR against the accepted spec. It does not edit product code, the seed, or `tests/suggested-credit-api.test.ts`. It posts concrete test and UI evidence to the PR and LY-6.
+The verifier independently records the clean-main baseline, then checks the implementation PR against `<ACCEPTANCE>` and `<VERIFICATION_STEPS>`. It does not edit product code or protected tests. It posts concrete evidence to the PR and `<ISSUE_ID>`. For LY-6, protected assets include the seed and `tests/suggested-credit-api.test.ts`.
 
 This is partitioned responsibility, not artificial parallel test authoring. The product PR remains singular.
 
@@ -128,14 +128,14 @@ A different authorized human approves the Cloud Agent PR. Only the operator merg
 
 After the operator merges, launch the closeout card from updated `main`. The closeout Cloud Agent:
 
-1. Verifies the client selects v2.
-2. Verifies both API routes remain.
-3. Runs the suite and verifies `dsp_1043` shows $249.
-4. Comments the merge SHA and evidence on LY-6.
-5. Moves LY-6 to the existing **Done** state.
+1. Verifies `<ACCEPTANCE>` on updated `main`.
+2. Runs `<VERIFICATION_STEPS>`.
+3. Confirms `<PROTECTED_CONSTRAINTS>`.
+4. Comments the merge SHA and evidence on `<ISSUE_ID>`.
+5. Moves `<ISSUE_ID>` to the existing **Done** state.
 6. Leaves OpenSpec artifacts unchanged unless the operator explicitly requests archive or sync.
 
-Finish on Linear with LY-6 Done, then show the corrected dispute page. The completion signal is not only green code: it is a reviewed merge plus a closed ticket with evidence.
+Finish on Linear with the selected issue Done, then show its acceptance evidence. For the LY-6 example, show the corrected dispute page. The completion signal is not only green code: it is a reviewed merge plus a closed ticket with evidence.
 
 ## Reset for the next presentation
 

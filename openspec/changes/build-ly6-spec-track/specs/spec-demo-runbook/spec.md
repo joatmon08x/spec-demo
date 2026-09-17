@@ -1,6 +1,6 @@
 ## Purpose
 
-Defines a repeatable runbook that demonstrates the complete LY-6 spec-driven delivery lifecycle without consuming the planted bug before the presentation.
+Defines a repeatable runbook for the complete delivery lifecycle of any selected Linear issue, with LY-6 as a worked example that remains unconsumed before the presentation.
 
 ## ADDED Requirements
 
@@ -18,12 +18,18 @@ The runbook catalog SHALL expose one canonical track named `spec` and SHALL rout
 - **THEN** the application redirects to `/runbooks/spec`
 
 ### Requirement: Ordered delivery lifecycle
-The spec track SHALL present design, partitioned Cloud Agent implementation, guarded PR merge, and Linear closeout as four ordered sections with copy-ready prompts.
+The spec track SHALL present design, partitioned Cloud Agent implementation, guarded PR merge, and Linear closeout as four ordered sections with copy-ready prompts parameterized by Linear issue.
 
-#### Scenario: Follow the demo from start to finish
-- **GIVEN** LY-6 is in Backlog and the suggested-credit client selects v1
+#### Scenario: Follow any issue from start to finish
+- **GIVEN** a Linear issue is selected with acceptance criteria and verification steps
 - **WHEN** the operator follows each section in order
-- **THEN** every beat needed to design, implement, review, merge, and close LY-6 is available without consulting the retired tracks
+- **THEN** every beat needed to design, implement, review, merge, and close that issue is available without consulting the retired tracks
+- **AND** the prompts carry the selected issue identifier through the PR and closeout
+
+#### Scenario: Use LY-6 as the worked example
+- **GIVEN** LY-6 is in Backlog and the suggested-credit client selects v1
+- **WHEN** the operator selects LY-6 for the spec track
+- **THEN** the runbook supplies the issue-specific reproduction and preservation constraints for `dsp_1043`
 
 ### Requirement: Demo-ready baseline
 Repository cleanup SHALL preserve the valid 40000-cent dispute claim, the 24900-cent Scale catalog cap, both suggested-credit routes, and the intentionally failing client migration test.

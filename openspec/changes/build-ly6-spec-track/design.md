@@ -1,12 +1,12 @@
 ## Context
 
-See `proposal.md` for motivation. Runbooks are static typed data rendered by the App Router and exposed through matching JSON routes. The current repository has no active product-change spec, LY-6 is Backlog, and the v1 client selection remains the intentional demo failure.
+See `proposal.md` for motivation. Runbooks are static typed data rendered by the App Router and exposed through matching JSON routes. The workflow must apply to any selected Linear issue. LY-6 is Backlog and its v1 client selection remains the concrete worked example.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Make `/runbooks/spec` the only canonical presenter track.
+- Make `/runbooks/spec` the only canonical, issue-agnostic presenter track.
 - Keep runbook UI, API output, presenter notes, agent prompts, and tests synchronized.
 - Make each external gate truthful: BugBot is a status check, human approval is separate, and only the operator merges.
 - Leave a deterministic pre-demo baseline.
@@ -27,13 +27,17 @@ See `proposal.md` for motivation. Runbooks are static typed data rendered by the
 
 The page will render the spec title and sections directly. Keeping a select with one option adds no navigation value and implies more tracks exist.
 
+### Parameterize the workflow and keep a worked example
+
+Reusable prompts use `<ISSUE_ID>`, `<ISSUE_TITLE>`, and issue-derived acceptance/verification inputs. LY-6-specific constraints appear in a clearly marked worked-example beat rather than being baked into Cloud role definitions. A track dedicated only to LY-6 was rejected because the same OpenSpec delivery lifecycle applies to the rest of the Linear backlog.
+
 ### Partition roles, not artificial code
 
-The implementation Cloud Agent owns the isolated v1-to-v2 selector change. A second Cloud Agent owns independent baseline and acceptance verification, then reports evidence on the same PR and Linear issue. Creating a redundant test file was rejected because the shipped regression test already defines the migration contract and project rules forbid assigning test authoring to a parallel worker.
+The implementation Cloud Agent owns the product changes named by the accepted issue spec. A second Cloud Agent owns independent baseline and acceptance verification, then reports evidence on the same PR and Linear issue. For LY-6, creating a redundant test file is explicitly rejected because the shipped regression test already defines the migration contract.
 
 ### Keep merge and closeout sequential
 
-BugBot, CI, verifier evidence, and a human approval gate the operator's merge. A fresh closeout Cloud Agent then starts from updated `main`, verifies the result, comments on LY-6, and moves it to Done. The closeout cannot run in parallel because it depends on the merged commit.
+BugBot, CI, verifier evidence, and a human approval gate the operator's merge. A fresh closeout Cloud Agent then starts from updated `main`, verifies the issue-specific result, comments on the selected issue, and moves it to Done. The closeout cannot run in parallel because it depends on the merged commit.
 
 ### Treat external setup as capability detection
 

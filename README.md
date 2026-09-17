@@ -2,7 +2,7 @@
 
 Fictional B2B billing operations for the Fieldnote Workspace. Avery Quinn is the operator. The only catalog prices are Starter **$49**, Growth **$99**, and Scale **$249**. All customer data is synthetic.
 
-This repository demonstrates one end-to-end **spec track**: take Linear issue [LY-6](https://linear.app/anysphere/issue/LY-6) from Backlog through OpenSpec design, partitioned Cloud Agent implementation and verification, guarded PR review, human merge, and post-merge Linear closeout.
+This repository demonstrates one reusable end-to-end **spec track**: take any selected Linear issue from Backlog through OpenSpec design, partitioned Cloud Agent implementation and verification, guarded PR review, human merge, and post-merge Linear closeout. [LY-6](https://linear.app/anysphere/issue/LY-6) is the worked example.
 
 Copy-ready beats live at `/runbooks/spec`. The presenter run-of-show is `demo-howto.md`.
 
@@ -21,10 +21,10 @@ The clean demo baseline is **1 failed / 29 passed**. `tests/suggested-credit-api
 
 ## Spec track
 
-1. **Design with OpenSpec** — fetch LY-6 from Linear, reproduce the planted failure, run `/opsx-explore`, run `/opsx-propose`, review the artifacts, and validate strictly.
+1. **Design with OpenSpec** — fetch the selected issue from Linear, fill the issue placeholders, run `/opsx-explore`, run `/opsx-propose`, review the artifacts, and validate strictly.
 2. **Partitioned Cloud implementation** — one agent owns the v1-to-v2 selector and product PR; a second agent owns independent acceptance evidence.
 3. **Guarded PR review and merge** — watch CI and `Cursor Bugbot`, collect a separate human approval, then let the operator merge.
-4. **Post-merge closeout** — a Cloud Agent verifies updated `main`, comments evidence on LY-6, and moves it to Done.
+4. **Post-merge closeout** — a Cloud Agent verifies updated `main`, comments evidence on the selected issue, and moves it to Done.
 
 The OpenSpec sequence is mandatory:
 
@@ -55,6 +55,8 @@ The current Cloud Agent credential does not have `admin` or `maintain` permissio
 | Cloud handoff | `.cursor/skills/hand-to-cloud-agent/SKILL.md` |
 | Review agents | `.cursor/agents/ledgerly-reviewer.md`, `.cursor/agents/dispute-verifier.md` |
 | Linear backlog | Project `openspec`, issues LY-6 through LY-8 |
+
+Reusable prompts use `<ISSUE_ID>`, `<ISSUE_TITLE>`, `<CHANGE_ID>`, `<ACCEPTANCE>`, `<PATHS>`, `<VERIFICATION_STEPS>`, and `<PROTECTED_CONSTRAINTS>`. `openspec/sdk-kickoff.md` also includes filled LY-6 examples.
 
 ## Guardrails
 

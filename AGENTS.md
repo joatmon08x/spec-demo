@@ -63,15 +63,16 @@ Do not archive or sync unless the operator asks.
 
 Linear project: [openspec](https://linear.app/anysphere/project/openspec-05fc3d7dba89), team `LY`. Git repository: [joatmon08x/spec-demo](https://github.com/joatmon08x/spec-demo), starting ref `main`.
 
-For LY-6:
+For any selected Linear issue:
 
-- Implementation Cloud Agent owns the v1-to-v2 client selector and one PR with `Resolves LY-6`.
-- Verification Cloud Agent owns independent evidence and must not edit product code or the protected regression test.
+- Fill `<ISSUE_ID>`, `<ISSUE_TITLE>`, `<CHANGE_ID>`, `<ACCEPTANCE>`, `<PATHS>`, `<VERIFICATION_STEPS>`, and `<PROTECTED_CONSTRAINTS>` from Linear and the accepted spec.
+- Implementation Cloud Agent owns the issue's product paths and one PR with `Resolves <ISSUE_ID>`.
+- Verification Cloud Agent owns independent evidence and must not edit product code or protected regression tests.
 - `/autopilot` watches conflicts, comments, CI, and the `Cursor Bugbot` check.
 - BugBot is not a human approval. A human approves and the operator merges.
-- A post-merge Cloud Agent verifies updated `main`, comments evidence on LY-6, and moves it to Done.
+- A post-merge Cloud Agent verifies updated `main`, comments evidence on the selected issue, and moves it to Done.
 
-Copy-ready prompts live in `openspec/sdk-kickoff.md` and `.cursor/skills/hand-to-cloud-agent/SKILL.md`.
+Copy-ready parameterized prompts and filled LY-6 examples live in `openspec/sdk-kickoff.md` and `.cursor/skills/hand-to-cloud-agent/SKILL.md`.
 
 Current Cloud credentials cannot configure BugBot or branch rules. A Cursor-entitled repository administrator must enable BugBot, make its check appear on a safe PR, and require that check plus one human approval. Never claim an external check passed without evidence.
 

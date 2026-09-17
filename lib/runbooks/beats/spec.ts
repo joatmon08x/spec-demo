@@ -6,31 +6,31 @@ export const RUNBOOK_SECTIONS_SPEC = [
     title: "Design with OpenSpec",
     beats: [
       {
-        id: "pull-ly6",
-        title: "Pull live LY-6",
+        id: "pull-linear-issue",
+        title: "Pull live Linear issue",
         promptType: "reusable",
         detail:
-          "Load the live Linear issue. Keep LY-6 in Backlog until implementation starts. Do not invent a fourth catalog price.",
+          "Load the selected Linear issue. Keep <ISSUE_ID> in Backlog until implementation starts. Do not invent a fourth catalog price.",
         example:
-          "/ask Using Linear MCP, fetch LY-6 from project openspec (https://linear.app/anysphere/project/openspec-05fc3d7dba89). Summarize title, status, acceptance, and paths. Do not edit product code.",
+          "/ask Using Linear MCP, fetch <ISSUE_ID> (<ISSUE_TITLE>) from project openspec (https://linear.app/anysphere/project/openspec-05fc3d7dba89). Summarize title, status, acceptance (<ACCEPTANCE>), and paths. Do not edit product code.",
       },
       {
-        id: "reproduce-v1",
-        title: "Reproduce the planted failure",
+        id: "reproduce-worked-example",
+        title: "Worked example: reproduce LY-6 baseline",
         promptType: "reusable",
         detail:
-          "Confirm the demo baseline before any OpenSpec work. The $400 claim is valid input; Scale stays $249.",
+          "Worked example only — when the selected issue is LY-6. Confirm the demo baseline before any OpenSpec work. The $400 claim is valid input; Scale stays $249. Use this beat to fill <ISSUE_ID>, <ISSUE_TITLE>, <ACCEPTANCE>, and <VERIFICATION> for the reusable prompts that follow.",
         example:
-          "Open http://127.0.0.1:43173/disputes/dsp_1043. Confirm the page still selects suggested-credit v1 and shows $400.00. Confirm npm test fails only in tests/suggested-credit-api.test.ts because the client still selects v1. Do not migrate the client. Do not edit that test or the seed.",
+          "Worked example (LY-6): Open http://127.0.0.1:43173/disputes/dsp_1043. Confirm the page still selects suggested-credit v1 and shows $400.00. Confirm npm test fails only in tests/suggested-credit-api.test.ts because the client still selects v1. Do not migrate the client. Do not edit that test or the seed. Placeholder fill: <ISSUE_ID>=LY-6; <ISSUE_TITLE>=Dispute suggested-credit still selects v1; <ACCEPTANCE>=client selects v2, claim stays $400, Scale cap $249, both routes remain, protected test untouched; <VERIFICATION>=client path /api/v2/disputes/*/suggested-credit, dsp_1043 UI shows $249.00 suggested credit, npm test green except as specified by the accepted change.",
       },
       {
         id: "opsx-explore",
         title: "Explore with /opsx-explore",
         promptType: "reusable",
         detail:
-          "Start spec work with OpenSpec explore. Do not use Cursor Plan mode or /plan for this issue.",
+          "Start spec work with OpenSpec explore for the selected issue. Do not use Cursor Plan mode or /plan.",
         example:
-          "/opsx-explore LY-6 Dispute dsp_1043 claims $400 against a $249 Scale invoice. Root cause is lib/disputes/suggested-credit-api.ts still selecting deprecated v1. Preserve the $400 claim, both suggested-credit routes, and tests/suggested-credit-api.test.ts. Catalog only Starter $49, Growth $99, Scale $249.",
+          "/opsx-explore <ISSUE_ID> <ISSUE_TITLE>. Acceptance: <ACCEPTANCE>. Catalog only Starter $49, Growth $99, Scale $249. Do not invent a fourth price.",
       },
       {
         id: "opsx-propose",
@@ -39,7 +39,7 @@ export const RUNBOOK_SECTIONS_SPEC = [
         detail:
           "Write proposal, design, delta specs, and tasks under openspec/changes/<id>/. Planning artifacts only — no product code yet.",
         example:
-          "/opsx-propose For LY-6, propose an OpenSpec change that migrates SUGGESTED_CREDIT_API_VERSION from v1 to v2 in lib/disputes/suggested-credit-api.ts only. Preserve both API routes, the $400 claim on dsp_1043, the $249 Scale cap, and the regression test. Do not implement product code in this step.",
+          "/opsx-propose For <ISSUE_ID> (<ISSUE_TITLE>), propose an OpenSpec change that satisfies <ACCEPTANCE>. Catalog only Starter $49, Growth $99, Scale $249. Do not implement product code in this step.",
       },
       {
         id: "opsx-review",
@@ -48,7 +48,7 @@ export const RUNBOOK_SECTIONS_SPEC = [
         detail:
           "Confirm the change is accepted before any Cloud Agent applies product code.",
         example:
-          "/ask Review the active OpenSpec change for LY-6. Confirm proposal, design, delta specs, and tasks exist. Confirm the product edit is limited to selecting suggested-credit v2 and does not weaken tests/suggested-credit-api.test.ts. Do not implement yet.",
+          "/ask Review the active OpenSpec change for <ISSUE_ID> (<ISSUE_TITLE>). Confirm proposal, design, delta specs, and tasks exist. Confirm the product edits match <ACCEPTANCE> and do not weaken protected regression tests named by the change. Do not implement yet.",
       },
       {
         id: "opsx-validate",
@@ -56,7 +56,7 @@ export const RUNBOOK_SECTIONS_SPEC = [
         promptType: "reusable",
         detail: "Gate implementation on a successful strict OpenSpec validation.",
         example:
-          "Run `npx openspec validate --changes --strict` and `npx openspec list`. Report whether the LY-6 change passes. Do not start /opsx-apply until validation succeeds.",
+          "Run `npx openspec validate --changes --strict` and `npx openspec list`. Report whether the <ISSUE_ID> change passes. Do not start /opsx-apply until validation succeeds.",
       },
     ],
   },
@@ -69,12 +69,12 @@ export const RUNBOOK_SECTIONS_SPEC = [
         title: "Launch the implementation Cloud Agent",
         promptType: "reusable",
         detail:
-          "One Cloud Agent owns the isolated v1-to-v2 selector change and the product PR. Starting ref main on joatmon08x/spec-demo.",
-        example: `You are the LY-6 implementation Cloud Agent on https://github.com/joatmon08x/spec-demo (startingRef main). Linear project: https://linear.app/anysphere/project/openspec-05fc3d7dba89 (team LY).
+          "One Cloud Agent owns the product changes named by the accepted OpenSpec change and the product PR. Starting ref main on joatmon08x/spec-demo.",
+        example: `You are the implementation Cloud Agent for <ISSUE_ID> (<ISSUE_TITLE>) on https://github.com/joatmon08x/spec-demo (startingRef main). Linear project: https://linear.app/anysphere/project/openspec-05fc3d7dba89 (team LY).
 
-Work only from the accepted OpenSpec change for LY-6. Apply the product edit: set SUGGESTED_CREDIT_API_VERSION to "v2" in lib/disputes/suggested-credit-api.ts. Preserve both v1 and v2 suggested-credit routes. Do not edit tests/suggested-credit-api.test.ts. Do not correct the $400 claim on dsp_1043. Catalog only Starter $49, Growth $99, Scale $249.
+Work only from the accepted OpenSpec change for <ISSUE_ID>. Apply the product changes required by <ACCEPTANCE>. Catalog only Starter $49, Growth $99, Scale $249.
 
-Move LY-6 to In Progress. Push a PR whose body includes Resolves LY-6. Do not merge. Do not archive the OpenSpec change.`,
+Move <ISSUE_ID> to In Progress. Push a PR whose body includes Resolves <ISSUE_ID>. Do not merge. Do not archive the OpenSpec change.`,
         pasteLabel: "Paste to Cloud Agent",
       },
       {
@@ -83,17 +83,13 @@ Move LY-6 to In Progress. Push a PR whose body includes Resolves LY-6. Do not me
         promptType: "reusable",
         detail:
           "A second Cloud Agent owns independent baseline and acceptance evidence on the same PR and Linear issue. Do not invent parallel test-authoring work.",
-        example: `You are the LY-6 verifier Cloud Agent on https://github.com/joatmon08x/spec-demo. Linear issue: LY-6.
+        example: `You are the verifier Cloud Agent for <ISSUE_ID> (<ISSUE_TITLE>) on https://github.com/joatmon08x/spec-demo. Linear issue: <ISSUE_ID>.
 
-Do not edit product code or tests/suggested-credit-api.test.ts. Independently verify the implementation PR against the accepted OpenSpec change and LY-6 acceptance:
+Do not edit product code or weaken protected regression tests named by the accepted OpenSpec change. Independently verify the implementation PR against that change and <ACCEPTANCE>:
 
-1. Confirm the client selects /api/v2/disputes/*/suggested-credit.
-2. Confirm dsp_1043 still stores a $400 claim against INV-1043 (Scale $249).
-3. Confirm v1 and v2 routes remain.
-4. Run npm test and record the result.
-5. Open http://127.0.0.1:43173/disputes/dsp_1043 and confirm suggested credit shows $249.00.
+<VERIFICATION>
 
-Comment evidence on the PR and on LY-6. Do not merge.`,
+Comment evidence on the PR and on <ISSUE_ID>. Do not merge.`,
         pasteLabel: "Paste to Cloud Agent",
       },
       {
@@ -101,7 +97,7 @@ Comment evidence on the PR and on LY-6. Do not merge.`,
         title: "Confirm partitioned ownership",
         promptType: "none",
         detail:
-          "Implementation owns the selector edit and PR. Verification owns evidence only. Both agents share the same accepted specification; neither weakens the protected regression test.",
+          "Implementation owns the product edit and PR. Verification owns evidence only. Both agents share the same accepted specification; neither weakens protected regression tests named by the change.",
       },
     ],
   },
@@ -116,7 +112,7 @@ Comment evidence on the PR and on LY-6. Do not merge.`,
         detail:
           "CI is a required check. Refresh live PR state; do not claim green without evidence.",
         example:
-          "/autopilot Watch the open LY-6 PR. Refresh CI and check status each pass. Handle conflicts before comments before CI. Stop on ambiguous intent. Do not merge.",
+          "/autopilot Watch the open PR for <ISSUE_ID> (body includes Resolves <ISSUE_ID>). Refresh CI and check status each pass. Handle conflicts before comments before CI. Stop on ambiguous intent. Do not merge.",
       },
       {
         id: "bugbot-gate",
@@ -125,7 +121,7 @@ Comment evidence on the PR and on LY-6. Do not merge.`,
         detail:
           "BugBot is a status check, not a human approving review. If entitlement or admin access is missing, record the exact prerequisite — never invent a passed check.",
         example:
-          "On the LY-6 PR, confirm the Cursor Bugbot status check ran. If BugBot is unavailable, report the exact Cursor entitlement or GitHub administration prerequisite and use the manual review fallback. Do not claim BugBot passed without evidence.",
+          "On the <ISSUE_ID> PR, confirm the Cursor Bugbot status check ran. If BugBot is unavailable, report the exact Cursor entitlement or GitHub administration prerequisite and use the manual review fallback. Do not claim BugBot passed without evidence.",
       },
       {
         id: "human-approval",
@@ -153,25 +149,25 @@ Comment evidence on the PR and on LY-6. Do not merge.`,
         promptType: "reusable",
         detail:
           "Closeout starts after merge, from updated main. It cannot run in parallel with implementation.",
-        example: `You are the LY-6 closeout Cloud Agent on https://github.com/joatmon08x/spec-demo (startingRef main after the merge). Linear issue: LY-6.
+        example: `You are the closeout Cloud Agent for <ISSUE_ID> (<ISSUE_TITLE>) on https://github.com/joatmon08x/spec-demo (startingRef main after the merge). Linear issue: <ISSUE_ID>.
 
 1. Pull latest main.
-2. Confirm the client selects suggested-credit v2.
-3. Confirm dsp_1043 still claims $400 against Scale $249 and the UI shows suggested credit $249.00.
-4. Confirm both suggested-credit routes remain and tests/suggested-credit-api.test.ts was not weakened.
-5. Comment merge SHA and verification evidence on LY-6.
-6. Move LY-6 to the existing Done state.
-7. Archive or sync the OpenSpec change only if the runbook or operator explicitly directs it. Do not invent that instruction.`,
+2. Verify <ACCEPTANCE> on updated main.
+3. Run issue-specific checks:
+<VERIFICATION>
+4. Comment merge SHA and verification evidence on <ISSUE_ID>.
+5. Move <ISSUE_ID> to the existing Done state.
+6. Archive or sync the OpenSpec change only if the runbook or operator explicitly directs it. Do not invent that instruction.`,
         pasteLabel: "Paste to Cloud Agent",
       },
       {
-        id: "ly6-done",
-        title: "Confirm LY-6 Done",
+        id: "issue-done",
+        title: "Confirm issue Done",
         promptType: "reusable",
         detail:
           "Finish the lifecycle only when Linear shows Done and the comment carries merge plus verification evidence.",
         example:
-          "/ask Using Linear MCP, confirm LY-6 is Done, read the closeout comment for merge and verification evidence, and confirm suggested-credit still selects v2 on main. Do not reopen product work.",
+          "/ask Using Linear MCP, confirm <ISSUE_ID> is Done, read the closeout comment for merge and verification evidence, and confirm <ACCEPTANCE> still holds on main. Do not reopen product work.",
       },
     ],
   },

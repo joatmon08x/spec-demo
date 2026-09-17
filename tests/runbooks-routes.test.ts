@@ -34,8 +34,8 @@ describe("runbooks API", () => {
     expect(response.status).toBe(200);
     expect(body.id).toBe("spec");
     expect(body.href).toBe("/runbooks/spec");
-    expect(body.sections[0].beats[0].id).toBe("pull-ly6");
-    expect(body.sections.at(-1).beats.at(-1).id).toBe("ly6-done");
+    expect(body.sections[0].beats[0].id).toBe("pull-linear-issue");
+    expect(body.sections.at(-1).beats.at(-1).id).toBe("issue-done");
   });
 
   it("returns 404 for retired tracks", async () => {

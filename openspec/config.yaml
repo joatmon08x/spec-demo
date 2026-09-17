@@ -10,29 +10,32 @@ context: |
   npm test on a clean tree is 1 failed / 29 passed. Do not add a red suite to the default run.
   Spec work starts with /opsx-explore, not Cursor Plan mode. Do not implement until /opsx-propose has written openspec/changes/<id>/.
   This repo uses Linear project https://linear.app/anysphere/project/openspec-05fc3d7dba89 (team LY). Backlog issues LY-6, LY-7, LY-8. Cloud Agents start from git ref main on https://github.com/joatmon08x/spec-demo.
-  Cloud review lifecycle: partition implementation vs verification Cloud Agents; PR supervision watches CI and Cursor Bugbot; human approving review and human merge stay with the operator; post-merge closeout verifies main, comments the issue, and moves it Done. Archive/sync OpenSpec only on explicit operator instruction. Do not claim Bugbot passed unless the check is actually present.
+  Cloud review lifecycle is issue-agnostic: pick any Linear issue, then partition implementation vs verification Cloud Agents; PR supervision watches CI and Cursor Bugbot; human approving review and human merge stay with the operator; post-merge closeout verifies main, comments the selected issue, and moves it Done. PR body is Resolves <ISSUE_ID>. Archive/sync OpenSpec only on explicit operator instruction. Do not claim Bugbot passed unless the check is actually present. LY-6 is the worked example only.
 
 rules:
   proposal:
     - Include a Non-goals section. Name suggested-credit v1, the seed, and catalog prices as out of scope unless the change is explicitly that migration.
     - Name capabilities so each parallel worker maps to one specs/<capability>/spec.md file.
+    - Parameterize Cloud Agent handoffs by Linear issue (<ISSUE_ID>, <ISSUE_TITLE>) rather than hard-coding a single backlog item unless writing a worked example.
   specs:
     - Use Given/When/Then scenarios. Amounts come from lib/plans.ts. dsp_1043 accept stores 24900 cents, not 40000.
     - One capability folder per isolated implementer when the change is meant for /multitask.
+    - "For cloud-review-lifecycle, keep Bugbot as a distinct status check, human approval as a separate gate, and merge authority with the operator."
   tasks:
     - File-disjoint parallel workers first. Sequential e2e, reviewer, and verifier after apply.
     - Do not assign test-file authoring to a parallel worker.
     - Each parallel task MUST cite its delta spec path.
-    - For LY-6-style migrations: implementation owns the client-version edit and one PR (Resolves LY-n); verification owns baseline/spec evidence without editing protected tests; PR watch and closeout are sequential after the product PR exists / after merge.
+    - "For any selected issue: implementation owns the product paths and one PR (Resolves <ISSUE_ID>); verification owns baseline/spec evidence without editing protected tests; PR watch and closeout are sequential after the product PR exists / after merge."
+    - "LY-6 worked example only: implementation owns the client-version edit; verification must not edit tests/suggested-credit-api.test.ts; do not correct the $400 claim."
 
 operations:
   apply:
     guidance:
       - Require /opsx-explore then /opsx-propose with successful strict validation before any Cloud Agent applies product code.
       - Do not implement in the parent chat when tasks are file-disjoint; dispatch one worker per delta spec.
-      - Partition Cloud Agents: implementation = product edit + PR; verification = independent acceptance evidence; do not give the verifier protected-test edits.
+      - "Partition Cloud Agents by selected issue: implementation = product edit + PR (Resolves <ISSUE_ID>); verification = independent acceptance evidence; do not give the verifier protected-test edits."
       - ledgerly-reviewer on the combined diff. Human merges. Do not archive unless asked.
   archive:
     guidance:
-      - Human still merges. Closeout Cloud Agent verifies updated main, comments Linear, and moves the issue Done.
+      - "Human still merges. Closeout Cloud Agent verifies updated main, comments Linear <ISSUE_ID>, and moves that issue Done."
       - Do not archive or sync OpenSpec unless the operator explicitly directs it.

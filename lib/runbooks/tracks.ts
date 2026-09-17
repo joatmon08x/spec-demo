@@ -6,7 +6,7 @@ export const RUNBOOK_TRACKS = [
     id: "spec" as const,
     title: "Spec",
     description:
-      "Design LY-6 with OpenSpec, partition Cloud Agent implementation and verification, gate merge on BugBot, CI, and human approval, then close the issue from updated main.",
+      "Design any selected Linear issue with OpenSpec, partition Cloud Agent implementation and verification, gate merge on BugBot, CI, and human approval, then close the issue from updated main. LY-6 is the worked example.",
     sections: RUNBOOK_SECTIONS_SPEC,
   },
 ] as const satisfies readonly {
