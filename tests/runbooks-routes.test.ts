@@ -38,14 +38,19 @@ describe("runbooks API", () => {
     expect(body.sections.at(-1).beats.at(-1).id).toBe("ly6-done");
   });
 
-  it.each(["101", "201", "advanced", "bogus"])(
-    "returns 404 for retired or unknown track %s",
-    async (track) => {
+  it("returns 404 for retired tracks", async () => {
+    for (const track of ["101", "201", "advanced"]) {
       const response = await getRunbookTrack(request, trackParams(track));
       expect(response.status).toBe(404);
       await expect(response.json()).resolves.toEqual({ error: "Track not found" });
-    },
-  );
+    }
+  });
+
+  it("returns 404 for an unknown track", async () => {
+    const response = await getRunbookTrack(request, trackParams("bogus"));
+    expect(response.status).toBe(404);
+    await expect(response.json()).resolves.toEqual({ error: "Track not found" });
+  });
 });
 
 describe("runbooks redirects", () => {
