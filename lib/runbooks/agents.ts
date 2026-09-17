@@ -5,14 +5,9 @@ export const PROJECT_AGENTS = [
     when: "After any code change. Diff-only review against catalog prices, seed names, and protected paths.",
   },
   {
-    name: "api-instrumenter",
-    path: ".cursor/agents/api-instrumenter.md",
-    when: "/multitask worker. Add the request-log helper to one named API route and nothing else.",
-  },
-  {
     name: "dispute-verifier",
     path: ".cursor/agents/dispute-verifier.md",
-    when: "/goal and /orchestrate finish line. Report pass/fail evidence; write no product code.",
+    when: "Independent dispute acceptance and post-merge evidence for the LY-6 worked example. Report pass/fail; write no product code.",
   },
 ] as const;
 
@@ -20,22 +15,7 @@ export const PROJECT_SKILLS = [
   {
     name: "choose-cursor-workflow",
     path: ".cursor/skills/choose-cursor-workflow/SKILL.md",
-    when: "Walk the 101 or 201 track, then choose the mode, model, rule, or skill from the shape of the work.",
-  },
-  {
-    name: "stage-linear-201",
-    path: ".cursor/skills/stage-linear-201/SKILL.md",
-    when: "Before the 201 MCP section. Reconcile three issues on the private ce-field-demos Linear project.",
-  },
-  {
-    name: "standard-bug-fix",
-    path: ".cursor/skills/standard-bug-fix/SKILL.md",
-    when: "/standard-bug-fix on one ce-field-demos Linear issue.",
-  },
-  {
-    name: "dispatch-subagents",
-    path: ".cursor/skills/dispatch-subagents/SKILL.md",
-    when: "Many independent pieces. Launch Task subagents in one parallel turn.",
+    when: "Walk the spec track from Linear intake through Cloud Agent closeout.",
   },
   {
     name: "hand-to-cloud-agent",

@@ -1,21 +1,13 @@
-import { RUNBOOK_SECTIONS_101 } from "@/lib/runbooks/beats/101";
-import { RUNBOOK_SECTIONS_201 } from "@/lib/runbooks/beats/201";
+import { RUNBOOK_SECTIONS_SPEC } from "@/lib/runbooks/beats/spec";
 import type { DemoSection, DemoTrack } from "@/lib/runbooks/types";
 
 export const RUNBOOK_TRACKS = [
   {
-    id: "101" as const,
-    title: "101",
+    id: "spec" as const,
+    title: "Spec",
     description:
-      "You will explore different ways to work in Grok Build, use modes and models for the right tasks, apply rules and skills to ensure consistent quality, and complete at least one task with an agent.",
-    sections: RUNBOOK_SECTIONS_101,
-  },
-  {
-    id: "201" as const,
-    title: "201",
-    description:
-      "You will curate what belongs in an agent's context, encode conventions as project skills and hooks, connect a curated set of MCP servers, and split one task across parallel agents.",
-    sections: RUNBOOK_SECTIONS_201,
+      "Design any selected Linear issue with OpenSpec, partition Cloud Agent implementation and verification, gate merge on BugBot, CI, and human approval, then close the issue from updated main. LY-6 is the worked example.",
+    sections: RUNBOOK_SECTIONS_SPEC,
   },
 ] as const satisfies readonly {
   id: DemoTrack;
