@@ -23,6 +23,11 @@ export const PROJECT_SKILLS = [
     when: "Walk the 101 or 201 track, then choose the mode, model, rule, or skill from the shape of the work.",
   },
   {
+    name: "plan-to-openspec",
+    path: ".cursor/skills/plan-to-openspec/SKILL.md",
+    when: "101 Plan beat. /opsx-explore, then /opsx-propose the change under openspec/changes/<id>/. Planning files only.",
+  },
+  {
     name: "stage-linear",
     path: ".cursor/skills/stage-linear/SKILL.md",
     when: "Reconcile Fieldnote issues on the private ce-field-demos Linear project.",

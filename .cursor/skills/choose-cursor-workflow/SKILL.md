@@ -21,7 +21,7 @@ Start a demo session with `npm run demo:session -- start`. Record every rule, sk
 
 ## 101 sections and beats
 
-1. **What is Grok Build?** — Ask, Plan, Build in Agent mode, Debug, check the models, plan to fix the bug.
+1. **What is Grok Build?** — Ask, Plan (`/opsx-explore`), Propose (`/opsx-propose invoice-detail-email`), Build in Agent mode (`/opsx-apply invoice-detail-email`), Debug, check the models, plan to fix the bug.
 2. **How do I work with an agent?** — Run Mode allowlist, verify the email feature, redact, stop, interrupt and steer, continue to the end, review diffs, restore from a checkpoint.
 3. **How do I govern my agent?** — create a user rule, test the rule, create a user skill, test the skill, Canvas, MCP / Figma.
 
@@ -35,7 +35,7 @@ Start a demo session with `npm run demo:session -- start`. Record every rule, sk
 ## Choose the mode
 
 - **Ask** reads and explains; it does not edit. Use it to orient before touching code.
-- **Plan** maps an approach before implementation.
+- **OpenSpec** maps an approach before implementation. `/opsx-explore` thinks, `/opsx-propose` writes `openspec/changes/<id>/`, `/opsx-apply` builds. Do not use Plan mode or `/plan` for the Plan beat.
 - **Agent** is the default; it inspects, edits, and runs checks within the boundary you give it.
 - **Debug** verifies a change and investigates failures.
 

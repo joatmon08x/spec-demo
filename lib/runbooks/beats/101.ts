@@ -16,15 +16,26 @@ export const RUNBOOK_SECTIONS_101 = [
         id: "plan",
         title: "Plan",
         promptType: "adaptable",
-        detail: "Map your approach to building a new feature in Plan mode.",
+        detail:
+          "Map your approach to building a new feature with OpenSpec. Explore first — nothing is written until you confirm the change.",
         example:
-          "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
+          "/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
+      },
+      {
+        id: "propose",
+        title: "Propose",
+        promptType: "reusable",
+        detail:
+          "Write the change under openspec/changes/invoice-detail-email/: proposal, design, delta spec, and tasks. No product code yet.",
+        example: "/opsx-propose invoice-detail-email",
       },
       {
         id: "agent-build",
         title: "Build in Agent mode",
-        promptType: "none",
-        detail: "Build the feature in Agent mode. Build the plan locally. Check the feature in the UI.",
+        promptType: "reusable",
+        detail:
+          "Build the feature in Agent mode. Apply the proposed change locally. Check the feature in the UI.",
+        example: "/opsx-apply invoice-detail-email",
       },
       {
         id: "debug",

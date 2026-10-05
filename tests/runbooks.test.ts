@@ -38,12 +38,13 @@ describe("runbook catalog", () => {
     expect(skill).toContain(track101?.description ?? "");
 
     expect(runbookBeatSequence("101")).toBe(
-      "Ask → Plan → Build in Agent mode → Debug → Check the models → Plan to fix the bug → Run Mode Allowlist → Verify the email feature → Redact (partial) → Stop the prompt → Interrupt and steer → Continue to the end → Review diffs → Restore from a checkpoint → Create a user rule → Test the rule → Create a user skill → Test the skill → Canvas → MCP / Figma",
+      "Ask → Plan → Propose → Build in Agent mode → Debug → Check the models → Plan to fix the bug → Run Mode Allowlist → Verify the email feature → Redact (partial) → Stop the prompt → Interrupt and steer → Continue to the end → Review diffs → Restore from a checkpoint → Create a user rule → Test the rule → Create a user skill → Test the skill → Canvas → MCP / Figma",
     );
 
     expect(beats101.map((beat) => beat.id)).toEqual([
       "ask",
       "plan",
+      "propose",
       "agent-build",
       "debug",
       "model-fast",
@@ -68,14 +69,20 @@ describe("runbook catalog", () => {
 
     expect(beat("ask")?.detail).toBe("Let’s learn more about the application with Ask mode.");
     expect(beat("ask")?.example).toBe("/ask Tell me what this application does in 3 sentences");
-    expect(beat("plan")?.detail).toBe("Map your approach to building a new feature in Plan mode.");
+    expect(beat("plan")?.detail).toBe(
+      "Map your approach to building a new feature with OpenSpec. Explore first — nothing is written until you confirm the change.",
+    );
     expect(beat("plan")?.example).toBe(
-      "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
+      "/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
     );
+    expect(beat("propose")?.detail).toBe(
+      "Write the change under openspec/changes/invoice-detail-email/: proposal, design, delta spec, and tasks. No product code yet.",
+    );
+    expect(beat("propose")?.example).toBe("/opsx-propose invoice-detail-email");
     expect(beat("agent-build")?.detail).toBe(
-      "Build the feature in Agent mode. Build the plan locally. Check the feature in the UI.",
+      "Build the feature in Agent mode. Apply the proposed change locally. Check the feature in the UI.",
     );
-    expect(beat("agent-build")?.example).toBeUndefined();
+    expect(beat("agent-build")?.example).toBe("/opsx-apply invoice-detail-email");
     expect(beat("debug")?.detail).toBe(
       "Investigate the failing test using Debug mode. Debug mode is useful because the agent investigates the codebase and presents some hypothesis on the root cause. I can choose to reproduce the bug and attempt to fix based on the agent’s hypotheses.",
     );
@@ -153,7 +160,8 @@ describe("runbook catalog", () => {
     expect(beats101.every((entry) => entry.promptType !== undefined)).toBe(true);
     expect(beat("ask")?.promptType).toBe("reusable");
     expect(beat("plan")?.promptType).toBe("adaptable");
-    expect(beat("agent-build")?.promptType).toBe("none");
+    expect(beat("propose")?.promptType).toBe("reusable");
+    expect(beat("agent-build")?.promptType).toBe("reusable");
     expect(RUNBOOK_SECTIONS_101.map((section) => section.title)).toEqual([
       "What is Grok Build?",
       "How do I work with an agent?",

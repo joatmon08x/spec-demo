@@ -45,6 +45,17 @@ npm run dev
 
 Listens on **43173** (not 3000).
 
+### OpenSpec (101 Plan beat)
+
+The 101 Plan beat uses OpenSpec locally, not Plan mode. `/opsx-explore` thinks and writes nothing. `/opsx-propose <id>` writes `openspec/changes/<id>/` (proposal, design, delta specs, tasks). `/opsx-apply <id>` builds against it. Do not edit product code for a spec-driven feature before the change exists and strict validation passes.
+
+```bash
+npx openspec validate --changes --strict
+npx openspec list
+```
+
+The demo change id is `invoice-detail-email`. Do not archive or sync a change unless the operator asks. Linear is a 201 beat; do not pull it into 101.
+
 ### Private Linear team (manual, before 201 MCP)
 
 Linear MCP cannot create teams. The operator creates a private team in the Linear UI, then an agent runs `stage-linear`.
@@ -102,6 +113,8 @@ Incomplete on purpose:
 | `.cursor/agents/api-instrumenter.md` | `/multitask` worker — one API route |
 | `.cursor/agents/dispute-verifier.md` | `/goal` and `/orchestrate` finish line |
 | `.cursor/skills/choose-cursor-workflow/` | Walk the 101 or 201 track: modes, models, rules, skills, and finishing one task with an agent |
+| `.cursor/skills/plan-to-openspec/` | Turn an explored feature into an OpenSpec change (planning files only) |
+| `.cursor/skills/openspec-*/` | Explore, propose, apply, update, sync, and archive OpenSpec changes |
 | `.cursor/skills/stage-linear/` | Reconcile Fieldnote issues on the private `ce-field-demos` Linear project |
 | `.cursor/skills/standard-bug-fix/` | `/standard-bug-fix` — pull one ce-field-demos Linear issue and fix only that bug |
 | `.cursor/skills/dispatch-subagents/` | Parallel Task launches |

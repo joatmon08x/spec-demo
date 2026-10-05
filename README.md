@@ -29,6 +29,7 @@ Dashboard, Invoices, Collections, Disputes, Runbooks, Settings. Extra book accou
 | `/loop` job | `POST` then `GET` `/api/demo/job` (~45s, not written to SQLite) |
 | Agents | `.cursor/agents/` — `ledgerly-reviewer`, `api-instrumenter`, `dispute-verifier` |
 | Skills | `.cursor/skills/` — run the demo, stage Linear, or pick a Cursor workflow |
+| OpenSpec | `openspec/` — `/opsx-explore` → `/opsx-propose` → `/opsx-apply` locally; `npm run openspec:validate` |
 | Disk plugin | `plugins/standard-bug-fix/` — add from local repository; `/standard-bug-fix`, Linear MCP |
 | Presenter script | `demo-howto.md` — the 101 and 201 run-of-show |
 
@@ -70,7 +71,7 @@ Restyle the four KPI cards on this dashboard using only the existing design toke
 
 Open `/runbooks/101`, copy a card, and paste it in Grok Build. You still review the result.
 
-1. **What is Grok Build?** — Ask, Plan, Build in Agent mode, Debug, and check the models.
+1. **What is Grok Build?** — Ask, Plan (`/opsx-explore`), Propose (`/opsx-propose`), Build in Agent mode (`/opsx-apply`), Debug, and check the models.
 2. **How do I work with an agent?** — Run Mode allowlist, verify the email feature, redact, stop, interrupt and steer, continue to the end, review diffs, restore from a checkpoint.
 3. **How do I govern my agent?** — create and test a rule, create and test a skill, Canvas, MCP / Figma.
 
@@ -106,6 +107,7 @@ During a fresh setup, create issues sequentially: suggested-credit first, **Clic
 | `api-instrumenter` | One API route per parallel worker. |
 | `dispute-verifier` | Dispute-resolution finish line. No product code. |
 | `choose-cursor-workflow` | Walk the 101 or 201 track and pick the mode or model. |
+| `plan-to-openspec` | Turn an explored feature into an OpenSpec change. Planning files only; `/opsx-apply` builds it. |
 | `stage-linear` | Reconcile Fieldnote issues on the private `ce-field-demos` Linear project. |
 | `standard-bug-fix` | Pull one ce-field-demos Linear issue, then fix only that bug. |
 | `dispatch-subagents` | Parallel Task launches. |
@@ -116,4 +118,5 @@ During a fresh setup, create issues sequentially: suggested-credit first, **Clic
 ## Notes
 
 - Prices and customer names only from `lib/plans.ts`, `prisma/seed.ts`, and `prisma/extra-accounts.ts`.
+- The 101 Plan beat is OpenSpec, not Plan mode. Do not archive or sync a change unless the operator asks.
 - Port 43173 busy: stop the old `npm run dev`. Empty dashboard: `npm run db:reset`.

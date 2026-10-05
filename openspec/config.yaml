@@ -1,0 +1,36 @@
+schema: spec-driven
+
+context: |
+  Ledgerly is a fictional Fieldnote billing-ops app. Operator Avery Quinn. No auth. No real companies.
+  Catalog only: Starter $49 (4900 cents), Growth $99 (9900 cents), Scale $249 (24900 cents) from lib/plans.ts. Format with formatUsd. Never invent a fourth price, ARR, usage overage, or enterprise tier.
+  Customers only from prisma/seed.ts and prisma/extra-accounts.ts. Emails use .example.
+  Demo clock is 2026-08-23. Dev server is port 43173.
+  Dispute dsp_1043 may claim $400 against a $249 Scale invoice — valid input. Stored credit on accept MUST be $249 (24900 cents). Do not "correct" the claim or the seed.
+  Do not migrate lib/disputes/suggested-credit-api.ts from v1 to v2 unless the change says so. Preserve both suggested-credit routes. Do not edit tests/suggested-credit-api.test.ts to get green.
+  npm test on a clean tree is 1 failed / 33 passed. Do not add a red suite to the default run.
+  OpenSpec runs locally in the 101 Plan beat: /opsx-explore, then /opsx-propose <id>, then /opsx-apply <id>. Not Cursor Plan mode. Do not implement until the change exists under openspec/changes/<id>/ and strict validation passes.
+  The 101 demo change is invoice-detail-email: update the customer email on the invoice detail customer card, no email-format validation.
+  Linear is a 201 beat. Do not reference Linear issues or Cloud Agents from a 101 change.
+  Archive or sync a change only on explicit operator instruction.
+
+rules:
+  proposal:
+    - Include a Non-goals section. Name suggested-credit v1, the seed, and catalog prices as out of scope unless the change is explicitly that migration.
+    - Name capabilities so each parallel worker maps to one specs/<capability>/spec.md file.
+  specs:
+    - Use Given/When/Then scenarios. Amounts come from lib/plans.ts. dsp_1043 accept stores 24900 cents, not 40000.
+    - One capability folder per isolated implementer when the change is meant for /multitask.
+  tasks:
+    - File-disjoint parallel workers first. Sequential e2e, reviewer, and verifier after apply.
+    - Do not assign test-file authoring to a parallel worker.
+    - Each parallel task MUST cite its delta spec path.
+
+operations:
+  apply:
+    guidance:
+      - Require /opsx-explore then /opsx-propose with successful strict validation before editing product code.
+      - Do not implement in the parent chat when tasks are file-disjoint; dispatch one worker per delta spec.
+      - ledgerly-reviewer on the combined diff. Human reviews. Do not archive unless asked.
+  archive:
+    guidance:
+      - Do not archive or sync OpenSpec unless the operator explicitly directs it.

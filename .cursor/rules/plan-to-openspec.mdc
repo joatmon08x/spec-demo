@@ -1,0 +1,22 @@
+---
+description: Spec work starts with /opsx-explore, not Cursor Plan mode
+alwaysApply: true
+---
+
+# OpenSpec starts at explore
+
+Do not use Cursor Plan mode or `/plan` for spec-driven work. Start with `/opsx-explore`, then `/opsx-propose <id>` → `/opsx-apply <id>` → `/opsx-archive` only when asked. Do not edit product code for that feature until an OpenSpec change exists under `openspec/changes/<id>/`.
+
+```
+# ❌ BAD
+/plan I want a new feature to update the customer email in the invoice detail customer card.
+
+# ✅ GOOD
+/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.
+/opsx-propose invoice-detail-email
+/opsx-apply invoice-detail-email
+```
+
+Cursor Desktop spelling is hyphenated (`/opsx-explore`). Validate with `npx openspec validate --changes --strict` before apply. Do not archive unless asked.
+
+OpenSpec is local in the 101 track. Linear is a 201 beat; do not pull Linear MCP or Cloud Agents into a 101 change.

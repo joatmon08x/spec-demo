@@ -10,7 +10,7 @@ The pastes below match the copy-paste blocks on `/runbooks/101` and `/runbooks/2
 
 The 101 track has three sections. Open `/runbooks/101` and copy a card for any beat.
 
-1. **What is Grok Build?** — [Ask](#ask), [Plan](#plan), [Build in Agent mode](#build-in-agent-mode), [Debug](#debug), check the models
+1. **What is Grok Build?** — [Ask](#ask), [Plan](#plan), [Propose](#propose), [Build in Agent mode](#build-in-agent-mode), [Debug](#debug), check the models
 2. **How do I work with an agent?** — allowlist, verify the email feature, redact, stop, interrupt and steer, continue to the end, review diffs, restore from a checkpoint
 3. **How do I govern my agent?** — [create a rule](#create-a-rule), create a skill, [Canvas](#canvas), [MCP / Figma](#mcp--figma)
 
@@ -36,6 +36,7 @@ Then add the engineering point: why the task is hard, what Grok Build takes on, 
 Use these definitions when the audience is new:
 
 - **Ask:** reads and explains; it does not edit.
+- **OpenSpec:** the plan lives in the repo. `/opsx-explore` thinks, `/opsx-propose` writes `openspec/changes/<id>/`, `/opsx-apply` builds against it.
 - **Agent:** can inspect, edit, and run checks within the boundary you give it.
 - **Rule:** an always-on project guardrail.
 - **Skill:** a reusable set of instructions for a kind of task.
@@ -131,31 +132,55 @@ Explain the dispute flow end to end. What is intentionally unfinished? Cite the 
 
 ## Plan
 
-**Open:** Plan mode. **Why:** Mapping the approach first keeps the change scoped.
+**Open:** Agent chat. Not Plan mode — the plan is an OpenSpec change in the repo. **Why:** Mapping the approach first keeps the change scoped, and the spec outlives the chat.
 
 **Paste:**
 
 ```text
-/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.
+/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.
 ```
 
-**Look for:** A short plan that names the files it would touch and defers validation.
+**Look for:** Explore reads `app/invoices/[id]/page.tsx`, names the customer card as the only surface, and defers validation. It writes nothing until you confirm.
+
+---
+
+## Propose
+
+**Why:** The proposal, design, delta spec, and tasks are files you can review and diff.
+
+**Paste:**
+
+```text
+/opsx-propose invoice-detail-email
+```
+
+**Look for:** `openspec/changes/invoice-detail-email/` with `proposal.md`, `design.md`, `specs/invoice-customer-email/spec.md`, and `tasks.md`. Scenarios are Given/When/Then. Non-goals name email-format validation and the catalog. No product code changed. Then:
+
+```bash
+npx openspec validate --changes --strict
+```
+
+Record it for reset:
+
+```bash
+npm run demo:session -- record project-path openspec/changes/invoice-detail-email
+```
 
 ---
 
 ## Build in Agent mode
 
-**Open:** Agent (the default). Keep [dsp_1043](http://127.0.0.1:43173/disputes/dsp_1043) visible.
+**Open:** Agent (the default). Keep [inv_1048](http://127.0.0.1:43173/invoices/inv_1048) visible.
 
-**Why:** End-to-end work crosses layers. **Benefit:** Agent traces, edits, and verifies the path. **Why it matters:** Explicit boundaries keep it reviewable.
+**Why:** End-to-end work crosses layers. **Benefit:** Agent edits and verifies against the spec you accepted. **Why it matters:** The boundary is the change, not the prompt.
 
 **Paste:**
 
 ```text
-Diagnose why dsp_1043 shows a $400 suggested credit even though v2 caps it at $249. Switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both API routes, the $400 dispute claim, and tests/suggested-credit-api.test.ts. Run the relevant tests and verify the page shows $249 from v2.
+/opsx-apply invoice-detail-email
 ```
 
-**Look for:** One client-version edit. Both v1 and v2 route tests still pass. `tests/suggested-credit-api.test.ts` turns green. The page shows **$249** from v2.
+**Look for:** Edits stay on the invoice detail customer card. Tasks tick off in `tasks.md`. No email-format validation. The customer name and `.example` address stay on the Fieldnote book. Open the invoice and change the email.
 
 ---
 
@@ -336,6 +361,8 @@ ledgerly-reviewer check my work
 
 - Invent a fourth price, ARR, or a real customer
 - "Correct" the $400 claim on dsp_1043 or the seed
+- Use Plan mode or `/plan` in the Plan beat — the plan is the OpenSpec change
+- Archive or sync an OpenSpec change unless the operator asks
 - Touch `tests/suggested-credit-api.test.ts` to make the migration pass
 - Delete or change either suggested-credit API route
 - Commit a KPI restyle to `main`
