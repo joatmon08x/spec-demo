@@ -16,26 +16,15 @@ export const RUNBOOK_SECTIONS_101 = [
         id: "plan",
         title: "Plan",
         promptType: "adaptable",
-        detail:
-          "Map your approach to building a new feature with OpenSpec. Explore first — nothing is written until you confirm the change.",
+        detail: "Map your approach to building a new feature in Plan mode.",
         example:
-          "/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
-      },
-      {
-        id: "propose",
-        title: "Propose",
-        promptType: "reusable",
-        detail:
-          "Write the change under openspec/changes/invoice-detail-email/: proposal, design, delta spec, and tasks. No product code yet.",
-        example: "/opsx-propose invoice-detail-email",
+          "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
       },
       {
         id: "agent-build",
         title: "Build in Agent mode",
-        promptType: "reusable",
-        detail:
-          "Build the feature in Agent mode. Apply the proposed change locally. Check the feature in the UI.",
-        example: "/opsx-apply invoice-detail-email",
+        promptType: "none",
+        detail: "Build the feature in Agent mode. Build the plan locally. Check the feature in the UI.",
       },
       {
         id: "debug",
@@ -168,13 +157,22 @@ export const RUNBOOK_SECTIONS_101 = [
         example: "Create a canvas explaining what we did today.",
       },
       {
-        id: "mcp",
-        title: "MCP / Figma",
+        id: "mcp-explore",
+        title: "MCP / Linear: explore",
         promptType: "adaptable",
         detail:
-          "Ask Grok Build to create a slideshow in Figma using MCP Servers. Find a MCP server for slideshow generation in Grok Build. Go to Customize > MCPs > Figma.",
+          "Explore the next feature with OpenSpec before anything is written. Explore thinks out loud and writes no files until you confirm.",
         example:
-          "Create three slides in Figma Slides outlining how I used Grok Build to develop a new feature. I want to use this as part of my demo showcase.",
+          "/opsx-explore I want to resolve disputes from the dispute page: enable Accept credit and Decline on the Resolution panel. Don’t change the suggested-credit routes.",
+      },
+      {
+        id: "mcp-propose",
+        title: "MCP / Linear: propose",
+        promptType: "adaptable",
+        detail:
+          "Ask Grok Build to write the OpenSpec change and file it as a Linear issue using MCP Servers. Go to Customize > MCPs > Linear.",
+        example:
+          "/opsx-propose resolve-dispute-panel. Then create one Linear issue in my project from the proposal: the title, acceptance from the delta spec, and paths from tasks. Do not implement.",
       },
     ],
   },

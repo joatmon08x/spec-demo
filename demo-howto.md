@@ -10,9 +10,9 @@ The pastes below match the copy-paste blocks on `/runbooks/101` and `/runbooks/2
 
 The 101 track has three sections. Open `/runbooks/101` and copy a card for any beat.
 
-1. **What is Grok Build?** — [Ask](#ask), [Plan](#plan), [Propose](#propose), [Build in Agent mode](#build-in-agent-mode), [Debug](#debug), check the models
+1. **What is Grok Build?** — [Ask](#ask), [Plan](#plan), [Build in Agent mode](#build-in-agent-mode), [Debug](#debug), check the models
 2. **How do I work with an agent?** — allowlist, verify the email feature, redact, stop, interrupt and steer, continue to the end, review diffs, restore from a checkpoint
-3. **How do I govern my agent?** — [create a rule](#create-a-rule), create a skill, [Canvas](#canvas), [MCP / Figma](#mcp--figma)
+3. **How do I govern my agent?** — [create a rule](#create-a-rule), create a skill, [Canvas](#canvas), [MCP / Linear](#mcp--linear) (explore, then propose a ticket)
 
 The 201 track has four sections. Open `/runbooks/201` and copy a card for any beat.
 
@@ -36,7 +36,6 @@ Then add the engineering point: why the task is hard, what Grok Build takes on, 
 Use these definitions when the audience is new:
 
 - **Ask:** reads and explains; it does not edit.
-- **OpenSpec:** the plan lives in the repo. `/opsx-explore` thinks, `/opsx-propose` writes `openspec/changes/<id>/`, `/opsx-apply` builds against it.
 - **Agent:** can inspect, edit, and run checks within the boundary you give it.
 - **Rule:** an always-on project guardrail.
 - **Skill:** a reusable set of instructions for a kind of task.
@@ -132,55 +131,31 @@ Explain the dispute flow end to end. What is intentionally unfinished? Cite the 
 
 ## Plan
 
-**Open:** Agent chat. Not Plan mode — the plan is an OpenSpec change in the repo. **Why:** Mapping the approach first keeps the change scoped, and the spec outlives the chat.
+**Open:** Plan mode. **Why:** Mapping the approach first keeps the change scoped.
 
 **Paste:**
 
 ```text
-/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.
+/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.
 ```
 
-**Look for:** Explore reads `app/invoices/[id]/page.tsx`, names the customer card as the only surface, and defers validation. It writes nothing until you confirm.
-
----
-
-## Propose
-
-**Why:** The proposal, design, delta spec, and tasks are files you can review and diff.
-
-**Paste:**
-
-```text
-/opsx-propose invoice-detail-email
-```
-
-**Look for:** `openspec/changes/invoice-detail-email/` with `proposal.md`, `design.md`, `specs/invoice-customer-email/spec.md`, and `tasks.md`. Scenarios are Given/When/Then. Non-goals name email-format validation and the catalog. No product code changed. Then:
-
-```bash
-npx openspec validate --changes --strict
-```
-
-Record it for reset:
-
-```bash
-npm run demo:session -- record project-path openspec/changes/invoice-detail-email
-```
+**Look for:** A short plan that names the files it would touch and defers validation.
 
 ---
 
 ## Build in Agent mode
 
-**Open:** Agent (the default). Keep [inv_1048](http://127.0.0.1:43173/invoices/inv_1048) visible.
+**Open:** Agent (the default). Keep [dsp_1043](http://127.0.0.1:43173/disputes/dsp_1043) visible.
 
-**Why:** End-to-end work crosses layers. **Benefit:** Agent edits and verifies against the spec you accepted. **Why it matters:** The boundary is the change, not the prompt.
+**Why:** End-to-end work crosses layers. **Benefit:** Agent traces, edits, and verifies the path. **Why it matters:** Explicit boundaries keep it reviewable.
 
 **Paste:**
 
 ```text
-/opsx-apply invoice-detail-email
+Diagnose why dsp_1043 shows a $400 suggested credit even though v2 caps it at $249. Switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both API routes, the $400 dispute claim, and tests/suggested-credit-api.test.ts. Run the relevant tests and verify the page shows $249 from v2.
 ```
 
-**Look for:** Edits stay on the invoice detail customer card. Tasks tick off in `tasks.md`. No email-format validation. The customer name and `.example` address stay on the Fieldnote book. Open the invoice and change the email.
+**Look for:** One client-version edit. Both v1 and v2 route tests still pass. `tests/suggested-credit-api.test.ts` turns green. The page shows **$249** from v2.
 
 ---
 
@@ -230,14 +205,34 @@ Create a canvas explaining what we did today.
 
 ---
 
-## MCP / Figma
+## MCP / Linear
 
-**Why:** Grok Build can drive external tools through MCP. **Benefit:** Generate slides for a showcase without leaving the editor.
+**Why:** Grok Build can drive external tools through MCP. **Benefit:** Turn the next idea into a reviewable spec, then file the ticket without leaving the editor. Two steps: explore writes nothing; propose writes the change and the issue.
 
-Enable a Figma MCP server: **Customize > MCP > Figma**, then:
+**Step 1 — explore.** Paste:
 
 ```text
-Create three slides in Figma Slides outlining how I used Grok Build to develop a new feature. I want to use this as part of my demo showcase.
+/opsx-explore I want to resolve disputes from the dispute page: enable Accept credit and Decline on the Resolution panel. Don’t change the suggested-credit routes.
+```
+
+**Look for:** Explore names `lib/disputes/resolve.ts`, the resolve API route, and the dispute page panel as the surface, and keeps the suggested-credit routes out of scope. No files change until you confirm.
+
+**Step 2 — propose and file.** Enable the Linear MCP server: **Customize > MCPs > Linear**, then paste:
+
+```text
+/opsx-propose resolve-dispute-panel. Then create one Linear issue in my project from the proposal: the title, acceptance from the delta spec, and paths from tasks. Do not implement.
+```
+
+**Look for:** `openspec/changes/resolve-dispute-panel/` with `proposal.md`, `design.md`, a delta spec, and `tasks.md`; then one new Linear issue whose acceptance matches the delta spec. No product code changed. Validate:
+
+```bash
+npx openspec validate --changes --strict
+```
+
+Record the change for reset. `reset-demo-state` cancels the Linear issue when the Linear MCP is connected.
+
+```bash
+npm run demo:session -- record project-path openspec/changes/resolve-dispute-panel
 ```
 
 ---
@@ -272,7 +267,7 @@ On a clean tree, npm test is 1 failed / 33 passed. The sole red test is tests/su
 npm run demo:reset
 ```
 
-**Then:** complete only the script's reported Figma, Cursor user-rule, or Linear MCP actions. The script resets files, recorded rules/skills, Canvas, branches, SQLite, and port 43173.
+**Then:** complete only the script's reported Cursor user-rule or Linear MCP actions. The script resets files, recorded rules/skills, Canvas, branches, SQLite, and port 43173.
 
 **Shipped state again:** suggested credit **$400.00** from v1 on dsp_1043, v2 and stored credit **$249.00**, suite **1 failed / 33 passed**, status pills still writing `state=`.
 
@@ -361,7 +356,7 @@ ledgerly-reviewer check my work
 
 - Invent a fourth price, ARR, or a real customer
 - "Correct" the $400 claim on dsp_1043 or the seed
-- Use Plan mode or `/plan` in the Plan beat — the plan is the OpenSpec change
+- Implement the resolve-dispute-panel change from the MCP / Linear beat — it ends at the ticket
 - Archive or sync an OpenSpec change unless the operator asks
 - Touch `tests/suggested-credit-api.test.ts` to make the migration pass
 - Delete or change either suggested-credit API route

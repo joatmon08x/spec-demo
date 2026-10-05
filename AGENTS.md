@@ -45,16 +45,14 @@ npm run dev
 
 Listens on **43173** (not 3000).
 
-### OpenSpec (101 Plan beat)
+### OpenSpec (last 101 beat only)
 
-The 101 Plan beat uses OpenSpec locally, not Plan mode. `/opsx-explore` thinks and writes nothing. `/opsx-propose <id>` writes `openspec/changes/<id>/` (proposal, design, delta specs, tasks). `/opsx-apply <id>` builds against it. Do not edit product code for a spec-driven feature before the change exists and strict validation passes.
+The 101 track ends with MCP / Linear in two steps. `/opsx-explore` thinks and writes nothing. `/opsx-propose <id>` writes `openspec/changes/<id>/` (proposal, design, delta specs, tasks), then the agent files one Linear issue from it through the Linear MCP. The beat ends at the ticket: do not `/opsx-apply`, archive, or sync unless the operator asks. The demo change id is `resolve-dispute-panel`. Every earlier 101 beat uses Plan mode and Agent mode as written.
 
 ```bash
 npx openspec validate --changes --strict
 npx openspec list
 ```
-
-The demo change id is `invoice-detail-email`. Do not archive or sync a change unless the operator asks. Linear is a 201 beat; do not pull it into 101.
 
 ### Private Linear team (manual, before 201 MCP)
 
@@ -120,5 +118,5 @@ Incomplete on purpose:
 | `.cursor/skills/dispatch-subagents/` | Parallel Task launches |
 | `.cursor/skills/hand-to-cloud-agent/` | Cloud `/goal`, `/autopilot`, and `/orchestrate` |
 | `.cursor/skills/write-prisma-query/` | Invoice, dispute, and customer lookups against SQLite — not an MCP |
-| `.cursor/mcp.json` | Empty project MCP map. 101 uses Figma (user MCP). 201 uses Linear (user MCP or `plugins/standard-bug-fix`). |
+| `.cursor/mcp.json` | Empty project MCP map. 101 uses Linear (user MCP) in its last beat. 201 uses Linear (user MCP or `plugins/standard-bug-fix`). |
 | `plugins/standard-bug-fix/` | 201-track disk plugin: `/standard-bug-fix` skill, Linear writeback rule, Linear MCP. |

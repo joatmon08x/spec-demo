@@ -25,7 +25,7 @@ export const PROJECT_SKILLS = [
   {
     name: "plan-to-openspec",
     path: ".cursor/skills/plan-to-openspec/SKILL.md",
-    when: "101 Plan beat. /opsx-explore, then /opsx-propose the change under openspec/changes/<id>/. Planning files only.",
+    when: "Last 101 beat. /opsx-explore, then /opsx-propose the change under openspec/changes/<id>/ and file it to Linear. Planning files only.",
   },
   {
     name: "stage-linear",

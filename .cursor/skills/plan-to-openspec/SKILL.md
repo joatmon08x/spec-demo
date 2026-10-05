@@ -1,14 +1,14 @@
 ---
 name: plan-to-openspec
-description: Turns an explored feature request into a local OpenSpec change after /opsx-explore. Do not use Cursor Plan mode.
+description: Turns an explored feature request into an OpenSpec change after /opsx-explore, then files it as one Linear issue. Last 101 beat only.
 disable-model-invocation: true
 ---
 
-# Explore, then OpenSpec
+# Explore, propose, file the ticket
 
-Planning artifacts only. Do not edit product code. Do not `/opsx-apply`. Stop after `openspec validate <id> --strict` passes.
+Planning artifacts only. Do not edit product code. Do not `/opsx-apply`. Stop after `openspec validate <id> --strict` passes and the Linear issue exists.
 
-Do not use Cursor Plan mode or `/plan`. Start with `/opsx-explore` (follow `.cursor/skills/openspec-explore/SKILL.md`). Then propose.
+This is the last 101 beat (MCP / Linear). Earlier beats use Plan mode and Agent mode as written; do not replace them with OpenSpec.
 
 ## Rough loop
 
@@ -21,9 +21,7 @@ Cursor Desktop spells those commands with hyphens: `/opsx-explore`, `/opsx-propo
 
 ## Input
 
-A scoped request the user already explored with `/opsx-explore`. The 101 track uses the invoice-email feature. Do not invent a fourth catalog price.
-
-Linear is a 201 beat. Do not fetch issues, add a ticket board, or spawn Cloud Agents from here.
+A scoped request the user already explored with `/opsx-explore`. The 101 track uses the dispute Resolution panel (`resolve-dispute-panel`). Do not invent a fourth catalog price.
 
 Worked mappings: [examples.md](examples.md).
 
@@ -38,12 +36,14 @@ Worked mappings: [examples.md](examples.md).
    - `specs/<capability>/spec.md` — ADDED/MODIFIED requirements with Given/When/Then
    - `design.md` — how, ownership, out of scope
    - `tasks.md` — checklist; one capability per isolated worker when work splits files
-6. `openspec validate <id> --strict` and `openspec status --change <id>`. Report the change path. Do not implement.
+6. `openspec validate <id> --strict` and `openspec status --change <id>`.
+7. File one Linear issue through the Linear MCP in the project the operator names: title from the proposal, acceptance from the delta spec, paths from tasks, plus a link back to `openspec/changes/<id>/`. Report the issue identifier. Do not implement.
 
 ## Constraints
 
 - `dsp_1043` may claim $400 against Scale **$249**. Do not “correct” the claim or the seed. Stored credit on accept is **$249**.
 - Do not edit `tests/suggested-credit-api.test.ts` to force green. Preserve v1 and v2 suggested-credit routes.
-- Suggested-credit change: client to v2 only. Filter change: only filter selection. Email change: no email-format validation.
-- Do not complete `lib/disputes/resolve.ts` unless the user asked to apply that change after propose.
+- Resolution-panel change: Accept credit and Decline only; no suggested-credit migration. Email change: no email-format validation. Filter change: only filter selection.
+- Do not complete `lib/disputes/resolve.ts` — this beat ends at the ticket.
 - Do not archive. Specs become source of truth only after a later `/opsx-archive`.
+- Linear MCP cannot create teams. Use the project the operator names; never `save_project` onto a public team.

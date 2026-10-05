@@ -1,8 +1,37 @@
 # Explored requests → OpenSpec
 
-Catalog only: Starter $49, Growth $99, Scale $249. The 101 track runs the first one.
+Catalog only: Starter $49, Growth $99, Scale $249. The last 101 beat runs the first one and files it to Linear.
 
-## 1. email-on-invoice (101 Plan beat)
+## 1. resolve-dispute-panel (101 MCP / Linear beat)
+
+- Change id: `resolve-dispute-panel`
+- Capability: `dispute-resolution-panel`
+- Owns: `lib/disputes/resolve.ts`, `app/api/disputes/[id]/resolve/route.ts`, `app/disputes/[id]/page.tsx` (Resolution panel)
+- Non-goals: suggested-credit client migration, either suggested-credit route, the $400 claim, the seed, catalog prices
+- Verify: http://127.0.0.1:43173/disputes/dsp_1043
+
+Requirement sketch:
+
+```markdown
+### Requirement: Operator can resolve a dispute from its page
+The dispute Resolution panel SHALL enable Accept credit and Decline. Accept SHALL store the suggested credit capped at the invoice's catalog price.
+
+#### Scenario: Accept dsp_1043
+- **GIVEN** dsp_1043 claims 40000 cents against a Scale invoice priced at 24900 cents
+- **WHEN** the operator selects Accept credit
+- **THEN** the stored credit is 24900 cents
+- **AND** the dispute status is Resolved
+
+#### Scenario: Decline
+- **GIVEN** an open dispute
+- **WHEN** the operator selects Decline
+- **THEN** no credit is stored
+- **AND** the dispute status is Resolved
+```
+
+Linear issue: title from the proposal, acceptance from these scenarios, paths from tasks, link to `openspec/changes/resolve-dispute-panel/`.
+
+## 2. email-on-invoice
 
 - Change id: `invoice-detail-email`
 - Capability: `invoice-customer-email`
@@ -23,7 +52,7 @@ The invoice detail customer card SHALL let Avery Quinn update the seeded contact
 - **AND** the customer name is unchanged
 ```
 
-## 2. suggested-credit-v1
+## 3. suggested-credit-v1
 
 - Change id: `suggested-credit-v2-client`
 - Capability: `suggested-credit-client`
@@ -44,7 +73,7 @@ The dispute page client MUST call `/api/v2/disputes/{id}/suggested-credit`.
 - **AND** v1 still returns the raw 40000 cent claim
 ```
 
-## 3. filter-pills
+## 4. filter-pills
 
 - Change id: `filter-pills-status`
 - Capability: `status-filter-pills`
@@ -72,4 +101,4 @@ Selecting a status pill SHALL show only rows with that status and mark only that
 
 ## After explore
 
-`/opsx-explore` first. Then `/opsx-propose <id>`. If the work splits disjoint files, one capability per `/multitask` worker (same shape as a helper / API / UI split).
+`/opsx-explore` first. Then `/opsx-propose <id>` and one Linear issue. If the work later splits disjoint files, one capability per `/multitask` worker (same shape as a helper / API / UI split).

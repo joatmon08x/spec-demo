@@ -38,13 +38,12 @@ describe("runbook catalog", () => {
     expect(skill).toContain(track101?.description ?? "");
 
     expect(runbookBeatSequence("101")).toBe(
-      "Ask → Plan → Propose → Build in Agent mode → Debug → Check the models → Plan to fix the bug → Run Mode Allowlist → Verify the email feature → Redact (partial) → Stop the prompt → Interrupt and steer → Continue to the end → Review diffs → Restore from a checkpoint → Create a user rule → Test the rule → Create a user skill → Test the skill → Canvas → MCP / Figma",
+      "Ask → Plan → Build in Agent mode → Debug → Check the models → Plan to fix the bug → Run Mode Allowlist → Verify the email feature → Redact (partial) → Stop the prompt → Interrupt and steer → Continue to the end → Review diffs → Restore from a checkpoint → Create a user rule → Test the rule → Create a user skill → Test the skill → Canvas → MCP / Linear: explore → MCP / Linear: propose",
     );
 
     expect(beats101.map((beat) => beat.id)).toEqual([
       "ask",
       "plan",
-      "propose",
       "agent-build",
       "debug",
       "model-fast",
@@ -62,27 +61,22 @@ describe("runbook catalog", () => {
       "skill",
       "test-skill",
       "canvas",
-      "mcp",
+      "mcp-explore",
+      "mcp-propose",
     ]);
 
     const beat = (id: (typeof beats101)[number]["id"]) => beats101.find((entry) => entry.id === id);
 
     expect(beat("ask")?.detail).toBe("Let’s learn more about the application with Ask mode.");
     expect(beat("ask")?.example).toBe("/ask Tell me what this application does in 3 sentences");
-    expect(beat("plan")?.detail).toBe(
-      "Map your approach to building a new feature with OpenSpec. Explore first — nothing is written until you confirm the change.",
-    );
+    expect(beat("plan")?.detail).toBe("Map your approach to building a new feature in Plan mode.");
     expect(beat("plan")?.example).toBe(
-      "/opsx-explore I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
+      "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
     );
-    expect(beat("propose")?.detail).toBe(
-      "Write the change under openspec/changes/invoice-detail-email/: proposal, design, delta spec, and tasks. No product code yet.",
-    );
-    expect(beat("propose")?.example).toBe("/opsx-propose invoice-detail-email");
     expect(beat("agent-build")?.detail).toBe(
-      "Build the feature in Agent mode. Apply the proposed change locally. Check the feature in the UI.",
+      "Build the feature in Agent mode. Build the plan locally. Check the feature in the UI.",
     );
-    expect(beat("agent-build")?.example).toBe("/opsx-apply invoice-detail-email");
+    expect(beat("agent-build")?.example).toBeUndefined();
     expect(beat("debug")?.detail).toBe(
       "Investigate the failing test using Debug mode. Debug mode is useful because the agent investigates the codebase and presents some hypothesis on the root cause. I can choose to reproduce the bug and attempt to fix based on the agent’s hypotheses.",
     );
@@ -149,19 +143,25 @@ describe("runbook catalog", () => {
     expect(beat("test-skill")?.example).toBe("Use domain-driven design on this application. Do not edit files.");
     expect(beat("canvas")?.title).toBe("Canvas");
     expect(beat("canvas")?.example).toBe("Create a canvas explaining what we did today.");
-    expect(beat("mcp")?.title).toBe("MCP / Figma");
-    expect(beat("mcp")?.detail).toBe(
-      "Ask Grok Build to create a slideshow in Figma using MCP Servers. Find a MCP server for slideshow generation in Grok Build. Go to Customize > MCPs > Figma.",
+    expect(beat("mcp-explore")?.title).toBe("MCP / Linear: explore");
+    expect(beat("mcp-explore")?.detail).toBe(
+      "Explore the next feature with OpenSpec before anything is written. Explore thinks out loud and writes no files until you confirm.",
     );
-    expect(beat("mcp")?.example).toBe(
-      "Create three slides in Figma Slides outlining how I used Grok Build to develop a new feature. I want to use this as part of my demo showcase.",
+    expect(beat("mcp-explore")?.example).toBe(
+      "/opsx-explore I want to resolve disputes from the dispute page: enable Accept credit and Decline on the Resolution panel. Don’t change the suggested-credit routes.",
+    );
+    expect(beat("mcp-propose")?.title).toBe("MCP / Linear: propose");
+    expect(beat("mcp-propose")?.detail).toBe(
+      "Ask Grok Build to write the OpenSpec change and file it as a Linear issue using MCP Servers. Go to Customize > MCPs > Linear.",
+    );
+    expect(beat("mcp-propose")?.example).toBe(
+      "/opsx-propose resolve-dispute-panel. Then create one Linear issue in my project from the proposal: the title, acceptance from the delta spec, and paths from tasks. Do not implement.",
     );
 
     expect(beats101.every((entry) => entry.promptType !== undefined)).toBe(true);
     expect(beat("ask")?.promptType).toBe("reusable");
     expect(beat("plan")?.promptType).toBe("adaptable");
-    expect(beat("propose")?.promptType).toBe("reusable");
-    expect(beat("agent-build")?.promptType).toBe("reusable");
+    expect(beat("agent-build")?.promptType).toBe("none");
     expect(RUNBOOK_SECTIONS_101.map((section) => section.title)).toEqual([
       "What is Grok Build?",
       "How do I work with an agent?",

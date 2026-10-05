@@ -17,13 +17,13 @@ The beats live in `lib/runbooks/meta.ts` and as copy-paste blocks on `/runbooks/
 
 The named demo error is `dsp_1043` / the suggested-credit v1 client. Do not mention the invoice or dispute filter-pill `state=` seam unless the user is on that click path.
 
-Start a demo session with `npm run demo:session -- start`. Record every rule, skill, Canvas, Figma deck, Linear board, and demo branch it creates. Reset is script-first and clears both tracks at once; update the event record and reset script whenever a beat gains a new leftover.
+Start a demo session with `npm run demo:session -- start`. Record every rule, skill, Canvas, OpenSpec change, Linear issue, and demo branch it creates. Reset is script-first and clears both tracks at once; update the event record and reset script whenever a beat gains a new leftover.
 
 ## 101 sections and beats
 
-1. **What is Grok Build?** — Ask, Plan (`/opsx-explore`), Propose (`/opsx-propose invoice-detail-email`), Build in Agent mode (`/opsx-apply invoice-detail-email`), Debug, check the models, plan to fix the bug.
+1. **What is Grok Build?** — Ask, Plan, Build in Agent mode, Debug, check the models, plan to fix the bug.
 2. **How do I work with an agent?** — Run Mode allowlist, verify the email feature, redact, stop, interrupt and steer, continue to the end, review diffs, restore from a checkpoint.
-3. **How do I govern my agent?** — create a user rule, test the rule, create a user skill, test the skill, Canvas, MCP / Figma.
+3. **How do I govern my agent?** — create a user rule, test the rule, create a user skill, test the skill, Canvas, MCP / Linear in two steps: `/opsx-explore` the next feature, then `/opsx-propose resolve-dispute-panel` and file one Linear issue from it. The beat ends at the ticket.
 
 ## 201 sections and beats
 
@@ -35,7 +35,8 @@ Start a demo session with `npm run demo:session -- start`. Record every rule, sk
 ## Choose the mode
 
 - **Ask** reads and explains; it does not edit. Use it to orient before touching code.
-- **OpenSpec** maps an approach before implementation. `/opsx-explore` thinks, `/opsx-propose` writes `openspec/changes/<id>/`, `/opsx-apply` builds. Do not use Plan mode or `/plan` for the Plan beat.
+- **Plan** maps an approach before implementation.
+- **OpenSpec** (last 101 beat) turns the next idea into a reviewable change: `/opsx-explore` thinks, `/opsx-propose` writes `openspec/changes/<id>/`, then the ticket goes to Linear.
 - **Agent** is the default; it inspects, edits, and runs checks within the boundary you give it.
 - **Debug** verifies a change and investigates failures.
 

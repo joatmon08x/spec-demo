@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### In progress
 
-- **101 Plan beat on OpenSpec** — Plan is `/opsx-explore`, a new Propose beat is `/opsx-propose invoice-detail-email`, and Build in Agent mode is `/opsx-apply invoice-detail-email`. OpenSpec runs locally; Linear stays in 201. Adds `openspec/`, the `openspec-*` and `plan-to-openspec` skills, the `/opsx-*` commands, and `npm run openspec:validate`.
+- **101 MCP beat moves from Figma to Linear** — the last beat is now two steps: `/opsx-explore` the next feature, then `/opsx-propose resolve-dispute-panel` and file one Linear issue from it through the Linear MCP. Every other 101 beat is unchanged. Adds `openspec/`, the `openspec-*` and `plan-to-openspec` skills, the `/opsx-*` commands, and `npm run openspec:validate`.
 - **201 track** — Runbooks track `201` / `RUNBOOK_SECTIONS_201` is on main for CE workshop demos (Outline Show beats, Linear staging, disk plugin) but is not a formal release in this cut.
 
 ## [1.0.0] - 2026-09-15
